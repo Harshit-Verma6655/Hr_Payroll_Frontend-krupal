@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  background-color: white !important;
+}
+
+.login_dropshadow{
+  box-shadow: 0px 20px 50px 0px #6A6F74;
+}
+
+
+.custom_scroll::-webkit-scrollbar{
+display: none;
+}
+
+
+@media (min-width:1440px) {
+  .container_maxWidth_1440{
+    width: 100%;
+    padding: 0 calc(50vw - 720px);
+  }
+  .container_maxWidth_14402{
+    padding-top: 130px;
+  }
+  .custom_width_style{
+    margin-top: 15px;
+  }
+
+}
+
