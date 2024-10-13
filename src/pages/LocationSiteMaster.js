@@ -23,7 +23,7 @@ const LocationSiteMaster = () => {
 
     const [LocationData,setLocationData]=useState({
       Location_No:"",
-      Phone_o:"",
+      Location_Name:"",
       Phone_f:"",
       Address:"",
       City:"",
@@ -40,7 +40,7 @@ const LocationSiteMaster = () => {
     
         setLocationData({
           Location_No: res.Location_No || "", 
-          Phone_o: res.Phone_o || "",
+          Location_Name: res.Location_Name || "",
           Phone_f: res.Phone_f || "",
           Address: res.Address || "",
           City: res.City || "",
@@ -218,7 +218,7 @@ if(location.state!=="view"){
                       BulkCompanyExcel.map((item, index) => (
                         <tr key={index} className="hover:bg-gray-100">
                             <td className="px-4 py-2 border">{item?.Location_No}</td>
-                            <td className="px-4 py-2 border">{item?.Phone_o}</td>
+                            <td className="px-4 py-2 border">{item?.Location_Name}</td>
                             <td className="px-4 py-2 border">{item?.Phone_f}</td>
                             <td className="px-4 py-2 border">{item?.Address}</td>
                             <td className="px-4 py-2 border">{item?.City}</td>

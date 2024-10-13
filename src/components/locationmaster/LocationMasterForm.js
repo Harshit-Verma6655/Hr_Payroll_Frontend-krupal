@@ -65,15 +65,15 @@ const LocationMasterForm = ({AllExpand,notSave,LocationData,handleLocationData,h
             />
             </div>
             <div className='flex flex-col gap-1 w-[100%]'>
-            <label className={LabelCss}>Phone (O) </label>
-            <input className={InputCss} type='number' 
-               name="Phone_o"
-            value={LocationData.Phone_o}
+            <label className={LabelCss}>Location Name </label>
+            <input className={InputCss} type='text' 
+               name="Location_Name"
+            value={LocationData.Location_Name}
             onChange={handleLocationData}
             />
             </div>
             <div className='flex flex-col gap-1 w-[100%]'>
-            <label className={LabelCss}>Phone (F) </label>
+            <label className={LabelCss}>Phone No. </label>
             <input className={InputCss} type='number'
              name="Phone_f"
             value={LocationData.Phone_f}

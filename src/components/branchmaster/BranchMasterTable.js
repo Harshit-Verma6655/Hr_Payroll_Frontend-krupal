@@ -83,7 +83,7 @@ const BranchMasterTable = () => {
                   <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Owner Name</th>
                   <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Owner Address</th>
                   <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Nature of Business</th>
-                  <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Phone (O)</th>
+                  <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Location Name</th>
                   <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Contact Person Name</th>
                   <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Action</th>
                 </tr>
@@ -97,7 +97,7 @@ const BranchMasterTable = () => {
                     <td className=' border-b_color border px-2 py-[6px]'>{item.Owner_Name}</td>
                     <td className=' border-b_color border px-2 py-[6px]'>{item.Owner_Address}</td>
                     <td className=' border-b_color border px-2 py-[6px]'>{item.Nature_of_Business}</td>
-                    <td className=' border-b_color border px-2 py-[6px]'>{item.Phone_o}</td>
+                    <td className=' border-b_color border px-2 py-[6px]'>{item.Location_Name}</td>
                     <td className=' border-b_color border px-2 py-[6px]'>{item.Contact_Person_Name}</td>
                     <td className=' border-b_color border px-2 py-[6px]'>
                       <button onClick={() => handleEditBranch(item._id)} className='text-blue-500 hover:underline'>Edit</button>

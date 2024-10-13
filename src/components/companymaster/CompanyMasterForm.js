@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
-const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setCompanyTwoTab,setCompanyData}) => {
+const CompanyMasterForm = ({ AllExpand, handleChange, companyData, viewMode, setCompanyTwoTab, setCompanyData }) => {
   const [CompanyInformation, setCompanyInformation] = useState(true);
   const [CompanyContract, setCompanyContract] = useState(false);
   const [CompanyAddress, setCompanyAddress] = useState(false);
@@ -71,10 +71,10 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
     }
   };
 
-  const handleNext = (e)=>{
+  const handleNext = (e) => {
     e.preventDefault()
     setCompanyTwoTab(1)
-   
+
 
   }
   return (
@@ -109,7 +109,7 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                   value={companyData.company_no}
                   onChange={handleChange}
                   readOnly
-                  
+
                 />
               </div>
               <div className="flex gap-1 w-[55%]  flex-col pl-3">
@@ -120,28 +120,28 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                   name="company_start_date"
                   value={companyData.company_start_date}
                   onChange={handleChange}
-                  
+
                 />
               </div>
               <div className="flex flex-col gap-1 w-[100%] pl-4">
-      <label className={LabelCss}>Created For.</label>
-      <div className="flex items-center gap-1 flex-wrap w-[100%]">
-        {['Company 1', 'Company 2', 'Company 3', 'Company 4'].map((company, index) => (
-          <div className="flex items-center gap-2" key={index}>
-            <input
-              type="radio"
-              name="company"
-              value={company} 
-              className="w-[15px] h-[15px]"
-              onChange={handleChange}
-               
-              checked={companyData?.created_for?.includes(company)}
-            />
-            <label className={LabelCss}>{company}</label>
-          </div>
-        ))}
-      </div>
-    </div>
+                <label className={LabelCss}>Created For.</label>
+                <div className="flex items-center gap-1 flex-wrap w-[100%]">
+                  {['Company 1', 'Company 2', 'Company 3', 'Company 4'].map((company, index) => (
+                    <div className="flex items-center gap-2" key={index}>
+                      <input
+                        type="radio"
+                        name="company"
+                        value={company}
+                        className="w-[15px] h-[15px]"
+                        onChange={handleChange}
+
+                        checked={companyData?.created_for?.includes(company)}
+                      />
+                      <label className={LabelCss}>{company}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <div className="w-full flex gap-[40px] mt-2">
@@ -151,7 +151,7 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                   name="company_name"
                   value={companyData.company_name}
                   onChange={handleChange}
-                  
+
                   className={`border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]`}
                   type="text"
                 />
@@ -164,7 +164,7 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                   name="company_type"
                   value={companyData.company_type}
                   onChange={handleChange}
-                  
+
                 />
               </div>
               <div className="flex gap-1 w-[100%] flex-col">
@@ -175,7 +175,7 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                   name="nature_of_industry"
                   value={companyData.nature_of_industry}
                   onChange={handleChange}
-                  
+
                 />
               </div>
             </div>
@@ -189,7 +189,7 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                   name="pan_no"
                   value={companyData.pan_no}
                   onChange={handleChange}
-                  
+
                 />
               </div>
               <div className="w-[100%]" />
@@ -225,17 +225,17 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
             <div className="w-[100%] flex gap-[40px] items-center">
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Company Address </label>
-                <input className={InputCss} type="text" 
-      name='company_address' value={companyData.company_address} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='company_address' value={companyData.company_address} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>City </label>
-                <input className={InputCss} type="text" 
-      name='city' value={companyData.city} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='city' value={companyData.city} onChange={handleChange}
+
 
                 />
               </div>
@@ -244,8 +244,8 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                 <input
                   className={`border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]`}
                   type="number"
-      name='pincode' value={companyData.pincode} onChange={handleChange}
-      
+                  name='pincode' value={companyData.pincode} onChange={handleChange}
+
 
                 />
               </div>
@@ -253,17 +253,17 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
             <div className="w-[100%] flex gap-[40px] items-center mt-2">
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>State </label>
-                <input className={InputCss} type="text" 
-      name='state' value={companyData.state} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='state' value={companyData.state} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex gap-1 w-[100%] flex-col">
                 <label className={LabelCss}>Country </label>
-                <input className={InputCss} type="text" 
-      name='country' value={companyData.country} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='country' value={companyData.country} onChange={handleChange}
+
 
                 />
               </div>
@@ -276,13 +276,13 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
             <div className="w-[100%] flex gap-[40px] items-center">
               <div className="flex gap-1 w-[100%] flex-col mt-2">
                 <label className={LabelCss}>Resi. Address</label>
-                <input className={InputCss} type="text" 
-      name='R_company_address' value={companyData.R_company_address} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='R_company_address' value={companyData.R_company_address} onChange={handleChange}
+
 
                 />
                 <div className="flex w-[100%] items-center">
-                  <input type="checkbox" className="mr-3" onChange={handleCheckboxChange}/>
+                  <input type="checkbox" className="mr-3" onChange={handleCheckboxChange} />
                   <label className="text-nowrap">Same as company address</label>
                 </div>
               </div>
@@ -291,8 +291,8 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                 <input
                   className={`border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]`}
                   type="text"
-      name='R_city' value={companyData.R_city} onChange={handleChange}
-      
+                  name='R_city' value={companyData.R_city} onChange={handleChange}
+
 
                 />
               </div>
@@ -301,8 +301,8 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                 <input
                   className={`border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]`}
                   type="number"
-      name='R_pincode' value={companyData.R_pincode} onChange={handleChange}
-      
+                  name='R_pincode' value={companyData.R_pincode} onChange={handleChange}
+
 
                 />
               </div>
@@ -313,16 +313,16 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                 <input
                   className={`border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]`}
                   type="text"
-      name='R_state' value={companyData.R_state} onChange={handleChange}
-      
+                  name='R_state' value={companyData.R_state} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex gap-1 w-[100%] flex-col">
                 <label className={LabelCss}>Country</label>
-                <input className={InputCss} type="text" 
-      name='R_country' value={companyData.R_country} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='R_country' value={companyData.R_country} onChange={handleChange}
+
 
                 />
               </div>
@@ -353,53 +353,53 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
           <div className={InformationBox}>
             <div className="w-[100%] flex gap-[40px] items-center">
               <div className="flex flex-col gap-1 w-[100%]">
-                <label className={LabelCss}>Phone(O) </label>
-                <input className={InputCss} type="text" 
-      name='phone_o' value={companyData.phone_o} onChange={handleChange}
-      
+                <label className={LabelCss}>Location Name </label>
+                <input className={InputCss} type="text"
+                  name='Location_Name' value={companyData.Location_Name} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex flex-col gap-1 w-[100%]">
-                <label className={LabelCss}>Phone(F)</label>
-                <input className={InputCss} type="text" 
-      name='phone_f' value={companyData.phone_f} onChange={handleChange}
-      
+                <label className={LabelCss}>Phone No.</label>
+                <input className={InputCss} type="text"
+                  name='phone_f' value={companyData.phone_f} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Email</label>
                 <input className={InputCss} type="email"
-      name='email' value={companyData.email} onChange={handleChange}
-      
-                
-                 />
+                  name='email' value={companyData.email} onChange={handleChange}
+
+
+                />
               </div>
             </div>
 
             <div className="w-[100%] flex gap-[40px] items-center mt-3">
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Cont.Person 1 </label>
-                <input className={InputCss} type="text" 
-      name='cont_person1' value={companyData.cont_person1} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='cont_person1' value={companyData.cont_person1} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Mobile No. 1 </label>
-                <input className={InputCss} type="text" 
-      name='mobile_1' value={companyData?.mobile_1} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='mobile_1' value={companyData?.mobile_1} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Designation 1 </label>
-                <input className={InputCss} type="text" 
-      name='designation1' value={companyData.designation1} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='designation1' value={companyData.designation1} onChange={handleChange}
+
 
                 />
               </div>
@@ -407,25 +407,25 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
             <div className="w-[100%] flex gap-[40px] items-center mt-3">
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Cont.Person 2 </label>
-                <input className={InputCss} type="text" 
-      name='cont_person2' value={companyData.cont_person2} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='cont_person2' value={companyData.cont_person2} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Mobile No. 2 </label>
-                <input className={InputCss} type="text" 
-      name='mobile_2' value={companyData.mobile_2} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='mobile_2' value={companyData.mobile_2} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Designation 2 </label>
-                <input className={InputCss} type="text" 
-      name='designation2' value={companyData.designation2} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='designation2' value={companyData.designation2} onChange={handleChange}
+
 
                 />
               </div>
@@ -433,11 +433,11 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
 
             {/* <div className='w-[100%] flex gap-[40px] items-center'>
          <div className='flex flex-col gap-1 w-[100%]'>
-            <label className={LabelCss}>Phone (O) </label>
+            <label className={LabelCss}>Location Name </label>
             <input className={InputCss} type='number' />
             </div>
             <div className='flex flex-col gap-1 w-[100%]'>
-            <label className={LabelCss}>Phone (F) </label>
+            <label className={LabelCss}>Phone No. </label>
             <input className={InputCss} type='number' />
             </div>
          </div> */}
@@ -465,9 +465,9 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
             <div className="w-[100%] flex gap-[40px] items-center">
               <div className="flex gap-1 w-[100%] flex-col">
                 <label className={LabelCss}>Bank Name </label>
-                <input className={InputCss} type="text" 
-      name='band_name' value={companyData.band_name} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='band_name' value={companyData.band_name} onChange={handleChange}
+
 
                 />
               </div>
@@ -476,16 +476,16 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                 <input
                   className={`border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]`}
                   type="number"
-      name='bank_account' value={companyData.bank_account} onChange={handleChange}
-      
+                  name='bank_account' value={companyData.bank_account} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex gap-1 w-[100%] flex-col">
                 <label className={LabelCss}>IFSC Code</label>
-                <input className={InputCss} type="text" 
-      name='ifsc_code' value={companyData.ifsc_code} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='ifsc_code' value={companyData.ifsc_code} onChange={handleChange}
+
 
                 />
               </div>
@@ -517,9 +517,9 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
             <div className="w-[100%] flex gap-[40px] items-center">
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>PF Code</label>
-                <input className={InputCss} type="text" 
-      name='pf_code' value={companyData.pf_code} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='pf_code' value={companyData.pf_code} onChange={handleChange}
+
 
                 />
               </div>
@@ -527,36 +527,36 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
                 <label className={LabelCss}>PF Rate</label>
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-3">
-                  <input
-              type="radio"
-              name="rate"
-              value="10%" 
-              onChange={handleChange}
-               
-              checked={companyData.pf_rate.includes("10%")}
-            />
+                    <input
+                      type="radio"
+                      name="rate"
+                      value="10%"
+                      onChange={handleChange}
+
+                      checked={companyData.pf_rate.includes("10%")}
+                    />
                     <label className={LabelCss}>10 %</label>
                   </div>
                   <div className="flex items-center gap-3">
-                  <input
-              type="radio"
-              name="rate"
-              value="12%" 
-              onChange={handleChange}
-               
-              checked={companyData.pf_rate.includes("12%")}
+                    <input
+                      type="radio"
+                      name="rate"
+                      value="12%"
+                      onChange={handleChange}
 
-            />
+                      checked={companyData.pf_rate.includes("12%")}
+
+                    />
                     <label className={LabelCss}>12 %</label>
                   </div>
                 </div>
               </div>
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>ESIC No.</label>
-                <input className={InputCss} type="text" 
-      name='esic_no' value={companyData.esic_no} onChange={handleChange}
-      
-                  
+                <input className={InputCss} type="text"
+                  name='esic_no' value={companyData.esic_no} onChange={handleChange}
+
+
                 />
               </div>
             </div>
@@ -591,25 +591,25 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
             <div className="w-[100%] flex gap-[40px] items-center">
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Minimum Wages</label>
-                <input className={InputCss} type="text" 
-      name='min_wages' value={companyData.min_wages} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='min_wages' value={companyData.min_wages} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Working Days</label>
-                <input className={InputCss} type="text" 
-      name='working_days' value={companyData.working_days} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='working_days' value={companyData.working_days} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex gap-1 w-[100%] flex-col">
                 <label className={LabelCss}>Weekly OFF</label>
-                <input className={InputCss} type="text" 
-      name='weekly_off' value={companyData.weekly_off} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='weekly_off' value={companyData.weekly_off} onChange={handleChange}
+
 
                 />
               </div>
@@ -646,25 +646,25 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData ,viewMode,setC
             <div className="w-[100%] flex gap-[40px] items-center">
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>File No.</label>
-                <input className={InputCss} type="text" 
-      name='file_no' value={companyData.file_no} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='file_no' value={companyData.file_no} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Active</label>
-                <input className={InputCss} type="text" 
-      name='active' value={companyData.active} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='active' value={companyData.active} onChange={handleChange}
+
 
                 />
               </div>
               <div className="flex flex-col gap-1 w-[100%]">
                 <label className={LabelCss}>Remarks</label>
-                <input className={InputCss} type="text" 
-      name='remarks' value={companyData.remarks} onChange={handleChange}
-      
+                <input className={InputCss} type="text"
+                  name='remarks' value={companyData.remarks} onChange={handleChange}
+
 
                 />
               </div>

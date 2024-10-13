@@ -52,7 +52,7 @@ const CompanyMaster = () => {
       R_pincode: '',
       R_state: '',
       R_country: '',
-      phone_o: '',
+      Location_Name: '',
       phone_f: '',
       email: '',
       cont_person1: '',
@@ -206,7 +206,7 @@ const CompanyMaster = () => {
             R_pincode: CompanyFetchData.R_pincode || '',
             R_state: CompanyFetchData.R_state || '',
             R_country: CompanyFetchData.R_country || '',
-            phone_o: CompanyFetchData.phone_o || '',
+            Location_Name: CompanyFetchData.Location_Name || '',
             phone_f: CompanyFetchData.phone_f || '',
             email: CompanyFetchData.email || '',
             cont_person1: CompanyFetchData.cont_person1 || '',
@@ -499,7 +499,7 @@ const CompanyMaster = () => {
                             <td className="px-4 py-2 border">{item?.R_pincode}</td>
                             <td className="px-4 py-2 border">{item?.R_state}</td>
                             <td className="px-4 py-2 border">{item?.R_country}</td>
-                            <td className="px-4 py-2 border">{item?.phone_o}</td>
+                            <td className="px-4 py-2 border">{item?.Location_Name}</td>
                             <td className="px-4 py-2 border">{item?.phone_f}</td>
                             <td className="px-4 py-2 border">{item?.email}</td>
                             <td className="px-4 py-2 border">{item?.cont_person1}</td>

@@ -1,38 +1,38 @@
 import React, { lazy, Suspense } from 'react'
-import {BrowserRouter,Route,Routes} from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast';
 import ProtectedRoute from './components/ProtectedRoute';
 
 
-const HomeScreen = lazy(()=>import("./pages/HomeScreen"))
-const LoginScreen = lazy(()=>import("./pages/LoginScreen"))
-const CompanyMaster = lazy(()=>import('./pages/CompanyMaster'))
-const EmployeeMaster = lazy(()=>import("./pages/EmployeeMaster"))
-const BranchMaster = lazy(()=>import("./pages/BranchMaster"))
-const ContractorMaster = lazy(()=>import('./pages/ContractorMaster'))
-const LocationSiteMaster = lazy(()=>import("./pages/LocationSiteMaster"))
-const EmployeeTable = lazy(()=>import('./components/employeeMaster/EmployeeTable'))
-const BranchMasterTable = lazy(()=>import("./components/branchmaster/BranchMasterTable"))
-const ContractorMasterTable = lazy(()=>import("./components/contractormaster/ContractorMasterTable"))
-const LocationMasterTable = lazy(()=>import("./components/locationmaster/LocationMasterTable"))
-const CompantTable  = lazy(()=>import('./components/companymaster/CompantTable'))
-
-
-
+const HomeScreen = lazy(() => import("./pages/HomeScreen"))
+const LoginScreen = lazy(() => import("./pages/LoginScreen"))
+const CompanyMaster = lazy(() => import('./pages/CompanyMaster'))
+const EmployeeMaster = lazy(() => import("./pages/EmployeeMaster"))
+const BranchMaster = lazy(() => import("./pages/BranchMaster"))
+const ContractorMaster = lazy(() => import('./pages/ContractorMaster'))
+const LocationSiteMaster = lazy(() => import("./pages/LocationSiteMaster"))
+const EmployeeTable = lazy(() => import('./components/employeeMaster/EmployeeTable'))
+const BranchMasterTable = lazy(() => import("./components/branchmaster/BranchMasterTable"))
+const ContractorMasterTable = lazy(() => import("./components/contractormaster/ContractorMasterTable"))
+const LocationMasterTable = lazy(() => import("./components/locationmaster/LocationMasterTable"))
+const CompantTable = lazy(() => import('./components/companymaster/CompantTable'))
+const CalculationMasterTable = lazy(() => import('./components/calculationMaster/calculationMasterTable'))
+const AddcalculationMaster = lazy(() => import('./components/calculationMaster/AddcalculationMaster'))
+const SalaryCalculationMaster = lazy(() => import('./components/calculationMaster/SalaryCalculationMaster'))
 
 const App = () => {
   return (
     <>
- 
- <BrowserRouter>
+
+      <BrowserRouter>
         <Routes>
           <Route
             path='/'
             element={
               <ProtectedRoute>
-              <Suspense fallback={<div>Loading.....</div>}>
-                <HomeScreen />
-              </Suspense>
+                <Suspense fallback={<div>Loading.....</div>}>
+                  <HomeScreen />
+                </Suspense>
               </ProtectedRoute>
             }
           />
@@ -135,7 +135,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path='/company/table'
             element={
               <ProtectedRoute>
@@ -145,9 +145,39 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path='/calculationMasterTable'
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<div>Loading.....</div>}>
+                  <CalculationMasterTable />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/AddcalculationMaster'
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<div>Loading.....</div>}>
+                  <AddcalculationMaster />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/SalaryCalculationMaster'
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<div>Loading.....</div>}>
+                  <SalaryCalculationMaster />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
-      <Toaster position='top-right' gutter={20}/>
+      <Toaster position='top-right' gutter={20} />
     </>
   )
 }

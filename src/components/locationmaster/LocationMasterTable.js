@@ -78,8 +78,8 @@ const LocationMasterTable = () => {
   <thead>
     <tr>
       <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Location No.</th>
-      <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Phone (O)</th>
-      <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Phone (F)</th>
+      <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Location Name</th>
+      <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Phone No.</th>
       <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Address</th>
       <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>City</th>
       <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Pin Code</th>
@@ -93,7 +93,7 @@ const LocationMasterTable = () => {
       LocationAllData.map((location, index) => (
         <tr key={index}>
           <td className='border-b_color border px-2 py-[6px]'>{location.Location_No}</td>
-          <td className='border-b_color border px-2 py-[6px]'>{location.Phone_o}</td>
+          <td className='border-b_color border px-2 py-[6px]'>{location.Location_Name}</td>
           <td className='border-b_color border px-2 py-[6px]'>{location.Phone_f}</td>
           <td className='border-b_color border px-2 py-[6px]'>{location.Address}</td>
           <td className='border-b_color border px-2 py-[6px]'>{location.City}</td>

@@ -32,7 +32,7 @@ const ContractorMaster = () => {
       Pin_Code:"",
       State:"",
       Country:"",
-      Phone_o:"",
+      Location_Name:"",
       Phone_f:"",
       Mobile_No:"",
       Contact_Person_Name:"",
@@ -65,7 +65,7 @@ const ContractorMaster = () => {
           Pin_Code: res.Pin_Code || "",
           State: res.State || "",
           Country: res.Country || "",
-          Phone_o: res.Phone_o || "",
+          Location_Name: res.Location_Name || "",
           Phone_f: res.Phone_f || "",
           Mobile_No: res.Mobile_No || "",
           Contact_Person_Name: res.Contact_Person_Name || "",
@@ -281,7 +281,7 @@ useEffect(()=>{
                             <td className="px-4 py-2 border">{item?.Pin_Code}</td>
                             <td className="px-4 py-2 border">{item?.State}</td>
                             <td className="px-4 py-2 border">{item?.Country}</td>
-                            <td className="px-4 py-2 border">{item?.Phone_o}</td>
+                            <td className="px-4 py-2 border">{item?.Location_Name}</td>
                             <td className="px-4 py-2 border">{item?.Phone_f}</td>
                             <td className="px-4 py-2 border">{item?.Mobile_No}</td>
                             <td className="px-4 py-2 border">{item?.Contact_Person_Name}</td>
