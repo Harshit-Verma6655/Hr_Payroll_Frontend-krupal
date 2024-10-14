@@ -166,6 +166,16 @@ const App = () => {
             }
           />
           <Route
+            path='/EditCalculationMaster/:id'
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<div>Loading.....</div>}>
+                  <AddcalculationMaster />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path='/SalaryCalculationMaster'
             element={
               <ProtectedRoute>
