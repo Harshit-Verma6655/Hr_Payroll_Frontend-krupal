@@ -297,7 +297,7 @@ const EmployeeMasterForm = ({ AllExpand, setEmployeeTab, handleEmployeeMasterCha
                       <option value="" disabled>Select Location</option> {/* Placeholder option */}
                       {LocationData &&
                         LocationData.map((loc, index) => (
-                          <option key={index} value={loc?.City}>{loc?.City}</option>
+                          <option key={index} value={loc?.Location_Name}>{loc?.Location_Name}</option>
                         ))
                       }
                     </select>
