@@ -20,7 +20,8 @@ const BranchMasterForm = ({ AllExpand, notSave, handleChangebranchData, BranchDa
     try {
       const response = await axios.post(`${BASE_URL}/branch/branch`, BranchData);
       console.log("Branch created successfully:", response.data);
-      toast.success(response.data.message)
+      toast.success(response.data.message);
+      navigate('/branch/table');
     } catch (error) {
       if (error?.response?.data?.message === "Token expired, please log in again") {
         localStorage.removeItem("token");

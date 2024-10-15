@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import DashboardLayout from '../DashboardLayout';
 import RootLayout from '../RootLayout';
 
@@ -9,7 +9,7 @@ const SalaryCalculationMaster = () => {
 
     const [formData, setFormData] = useState({
         year: 0,
-        month: 'Oct',
+        month: 'Oct', // Default value, will be updated from query params
         workingDays: 0,
         employeeName: '',
         payableDays: 0,
@@ -47,6 +47,20 @@ const SalaryCalculationMaster = () => {
     });
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Fetch month and year from query params on component mount
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const month = params.get('month') || 'Oct'; // Default to 'Oct' if not found
+        const year = params.get('year') || 0; // Default to 0 if not found
+
+        setFormData(prevData => ({
+            ...prevData,
+            month,
+            year: parseInt(year, 10), // Convert year to number
+        }));
+    }, [location.search]);
 
     // Handle input change
     const handleChange = (e) => {
@@ -60,6 +74,7 @@ const SalaryCalculationMaster = () => {
         console.log(formData);
         navigate('/calculationMasterTable');
     };
+
     // Sample array of employee names
     const employeeNames = [
         { id: 1, name: 'John Doe' },
@@ -278,7 +293,7 @@ const SalaryCalculationMaster = () => {
                     </div>
                 </section>
             </DashboardLayout>
-        </RootLayout>
+        </RootLayout >
     );
 };
 

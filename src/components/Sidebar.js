@@ -5,9 +5,11 @@ import { RxDashboard, RxListBullet } from "react-icons/rx";
 import { TbReport } from "react-icons/tb";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import MonthYearDialog from "../components/calculationMaster/MonthYearDialog";  // Import the dialog component
 
 const Sidebar = ({ sideBarInFocus }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { companyName, companyId } = useSelector((state) => state.company);
   const navigate = useNavigate();
 
@@ -15,6 +17,19 @@ const Sidebar = ({ sideBarInFocus }) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const openDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleConfirm = ({ month, year }) => {
+    console.log(`Selected Month: ${month}, Selected Year: ${year}`);
+    setIsDialogOpen(false); // Close dialog after confirming
+    // You can handle navigation or data processing with selected month and year
+  };
 
   useEffect(() => {
     if (sideBarInFocus === false) {
@@ -125,14 +140,19 @@ const Sidebar = ({ sideBarInFocus }) => {
         </Link>
 
         {/* Salary Calculations Link */}
-        <Link to="/SalaryCalculationMaster">
-          <div className="w-full flex items-center gap-3 group-hover:pl-3 transition-all duration-300 cursor-pointer">
-            <AiFillCalculator className="text-white text-[25px]" />
-            <p className="hidden group-hover:block text-white text-sm font-medium transition-all duration-300">
-              Salary Calculations
-            </p>
-          </div>
-        </Link>
+        <div onClick={openDialog} className="w-full flex items-center gap-3 group-hover:pl-3 transition-all duration-300 cursor-pointer">
+          <AiFillCalculator className="text-white text-[25px]" />
+          <p className="hidden group-hover:block text-white text-sm font-medium transition-all duration-300">
+            Salary Calculations
+          </p>
+        </div>
+
+        {/* MonthYearDialog */}
+        <MonthYearDialog
+          isOpen={isDialogOpen}
+          onConfirm={handleConfirm}
+          onCancel={closeDialog}
+        />
 
         {/* Reports Link */}
         <Link to="">

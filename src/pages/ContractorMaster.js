@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
-import RootLayout from '../components/RootLayout';
-import DashboardLayout from '../components/DashboardLayout';
-import ContractMasterForm from '../components/contractormaster/ContractMasterForm';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import Modal from 'react-modal';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import DashboardLayout from '../components/DashboardLayout';
+import RootLayout from '../components/RootLayout';
+import ContractMasterForm from '../components/contractormaster/ContractMasterForm';
 
 
 const ContractorMaster = () => {
@@ -92,7 +92,7 @@ const ContractorMaster = () => {
         const res = await response.data
         toast.success(res.message)
         console.log(res)
-
+        navigate('/contractor/table');
       }catch(error){
         console.log(error)
       }
