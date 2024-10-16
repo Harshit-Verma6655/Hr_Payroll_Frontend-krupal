@@ -190,7 +190,7 @@ const AddCalculationMaster = () => {
 
                         {/* Save and Cancel buttons */}
                         <div className='w-full flex justify-end gap-3'>
-                            <button type='submit' className='bg-green-500 text-white py-2 px-4 rounded' disabled={loading}>
+                            <button type='submit' className='bg-brand_colors text-white px-4 py-2 rounded hover:bg-opacity-80' disabled={loading}>
                                 {loading ? 'Saving...' : 'Save'}
                             </button>
                             <button type='button' className='bg-gray-500 text-white py-2 px-4 rounded' onClick={() => navigate('/calculationMasterTable')}>Cancel</button>

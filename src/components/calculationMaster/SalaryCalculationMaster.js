@@ -88,7 +88,7 @@ const SalaryCalculationMaster = () => {
             <DashboardLayout>
                 <section className='w-full px-10 py-4'>
                     <div className='w-full flex justify-between mb-4'>
-                        <h2 className='text-xl font-semibold text-brand_color'>Add Calculation Master</h2>
+                        <h2 className='text-[24px] font-bold'>Add Calculation Master</h2>
                     </div>
 
                     <form onSubmit={handleSubmit} className='w-full flex flex-wrap gap-4 mb-3'>
@@ -175,7 +175,7 @@ const SalaryCalculationMaster = () => {
                             <input className={InputCss} type='number' name='otherAmount' value={formData.otherAmount} onChange={handleChange} />
                         </div>
                         <div className='flex flex-wrap gap-5 w-[100%]'>
-                            <h2>Addition</h2>
+                            <h2 className='text-[24px] font-bold'>Addition</h2>
                         </div>
                         {/* Over Time */}
                         <div className='flex flex-col gap-1 w-[24%]'>
@@ -203,7 +203,7 @@ const SalaryCalculationMaster = () => {
                             <input className={InputCss} type='number' name='diffToPay' value={formData.diffToPay} onChange={handleChange} />
                         </div>
                         <div className='flex flex-wrap gap-5 w-[100%]'>
-                            <h2>Deductions</h2>
+                            <h2 className='text-[24px] font-bold'>Deductions</h2>
                         </div>
                         {/* Loan */}
                         <div className='flex flex-col gap-1 w-[24%]'>
@@ -288,7 +288,7 @@ const SalaryCalculationMaster = () => {
                     </form>
                     {/* Save and Clear buttons */}
                     <div className='flex gap-4'>
-                        <button className='bg-blue-500 text-white px-4 py-2 rounded' type='submit'>Save</button>
+                        <button className='bg-brand_colors text-white px-4 py-2 rounded hover:bg-opacity-80' type='submit'>Save</button>
                         <button className='bg-gray-500 text-white px-4 py-2 rounded' type='reset'>Clear</button>
                     </div>
                 </section>
