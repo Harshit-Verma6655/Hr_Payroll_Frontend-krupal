@@ -4,6 +4,7 @@ import { FaPlus } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 
 const EmployeeMasterForm = ({ AllExpand, setEmployeeTab, handleEmployeeMasterChange, EmployeeData, setEmployeeProfileImage, setEmployeeSign }) => {
@@ -24,6 +25,7 @@ const EmployeeMasterForm = ({ AllExpand, setEmployeeTab, handleEmployeeMasterCha
   const [LocationData, setLocationData] = useState()
   const BASE_URL = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token")
+  const { companyName, companyId } = useSelector((state) => state.company);
 
   useEffect(() => {
     if (EmployeeData.Employee_Image || EmployeeData.Employee_Sign_Image) {
@@ -35,7 +37,7 @@ const EmployeeMasterForm = ({ AllExpand, setEmployeeTab, handleEmployeeMasterCha
 
   const handleFetchAllBranch = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/branch/all`)
+      const response = await axios.get(`${BASE_URL}/branch/all?CompanyId=${companyId}`)
       const res = await response.data
       setBranchData(res)
 
@@ -57,7 +59,7 @@ const EmployeeMasterForm = ({ AllExpand, setEmployeeTab, handleEmployeeMasterCha
 
   const handleFetchAllLocation = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/location/all`)
+      const response = await axios.get(`${BASE_URL}/location/all?CompanyId=${companyId}`)
       const res = await response.data
       setLocationData(res)
     } catch (error) {

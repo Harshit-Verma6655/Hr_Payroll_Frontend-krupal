@@ -16,7 +16,7 @@ const LocationMasterTable = () => {
 
   const handleFetchLocation = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/location/all`, {
+      const response = await axios.get(`${BASE_URL}/location/all?CompanyId=${companyId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

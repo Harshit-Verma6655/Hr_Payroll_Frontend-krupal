@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import DashboardLayout from '../DashboardLayout';
 import RootLayout from '../RootLayout';
 
-const AddCalculationMaster = () => {
+const AddPFcalculationMaster = () => {
     const LabelCss = "text-[#000000] font-[500] text-[18px] text-nowrap";
     const InputCss = "border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]";
     const BASE_URL = process.env.REACT_APP_API_URL;
@@ -86,7 +86,7 @@ const AddCalculationMaster = () => {
             });
 
             if (response.ok) {
-                navigate('/calculationMasterTable');
+                navigate('/providentFund');
             } else {
                 const errorData = await response.json();
                 console.error('Error:', errorData);
@@ -102,17 +102,18 @@ const AddCalculationMaster = () => {
         <RootLayout>
             <DashboardLayout>
                 <section className='w-full px-10 py-4'>
-                    <div className='w-full flex justify-between mb-4'>
-                        <h2 className='text-xl font-semibold text-brand_color'>{id ? 'Edit Calculation Master' : 'Add Calculation Master'}</h2>
+                    <div className='w-[100%] text-white bg-brand_colors py-2 px-3 rounded flex gap-3 items-center'>
+                        <h2 className='text-[24px] cursor-pointer'>{id ? 'Edit Calculation Master' : 'Add Calculation Master'}</h2>
                     </div>
-                    <form onSubmit={handleSubmit} className='w-[100%] flex flex-wrap gap-[20px] mb-3'>
+                    <form onSubmit={handleSubmit} className='w-[100%] flex flex-wrap gap-[20px] mb-3 mt-5'>
                         {/* PF Type */}
                         <div className='flex flex-col gap-1 w-[30%]'>
                             <label className={LabelCss}>PF Type</label>
                             <select className={InputCss} name='PF_Type' value={formData.PF_Type} onChange={handleChange}>
                                 <option value="">Select</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
                                 <option value="Above">Above</option>
-                                <option value="Below">Below</option>
                             </select>
                         </div>
 
@@ -193,7 +194,7 @@ const AddCalculationMaster = () => {
                             <button type='submit' className='bg-brand_colors text-white px-4 py-2 rounded hover:bg-opacity-80' disabled={loading}>
                                 {loading ? 'Saving...' : 'Save'}
                             </button>
-                            <button type='button' className='bg-gray-500 text-white py-2 px-4 rounded' onClick={() => navigate('/calculationMasterTable')}>Cancel</button>
+                            <button type='button' className='bg-gray-500 text-white py-2 px-4 rounded' onClick={() => navigate('/providentFund')}>Cancel</button>
                         </div>
                     </form>
                 </section>
@@ -202,4 +203,4 @@ const AddCalculationMaster = () => {
     );
 };
 
-export default AddCalculationMaster;
+export default AddPFcalculationMaster;

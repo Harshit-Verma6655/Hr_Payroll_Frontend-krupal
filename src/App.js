@@ -16,8 +16,8 @@ const BranchMasterTable = lazy(() => import("./components/branchmaster/BranchMas
 const ContractorMasterTable = lazy(() => import("./components/contractormaster/ContractorMasterTable"))
 const LocationMasterTable = lazy(() => import("./components/locationmaster/LocationMasterTable"))
 const CompantTable = lazy(() => import('./components/companymaster/CompantTable'))
-const CalculationMasterTable = lazy(() => import('./components/calculationMaster/calculationMasterTable'))
-const AddcalculationMaster = lazy(() => import('./components/calculationMaster/AddcalculationMaster'))
+const ProvidentFundMasterTable = lazy(() => import('./components/calculationMaster/ProvidentFundMasterTable'))
+const AddPFcalculationMaster = lazy(() => import('./components/calculationMaster/AddPFcalculationMaster'))
 const SalaryCalculationMaster = lazy(() => import('./components/calculationMaster/SalaryCalculationMaster'))
 
 const App = () => {
@@ -146,21 +146,21 @@ const App = () => {
             }
           />
           <Route
-            path='/calculationMasterTable'
+            path='/providentFund'
             element={
               <ProtectedRoute>
                 <Suspense fallback={<div>Loading.....</div>}>
-                  <CalculationMasterTable />
+                  <ProvidentFundMasterTable />
                 </Suspense>
               </ProtectedRoute>
             }
           />
           <Route
-            path='/AddcalculationMaster'
+            path='/AddPFcalculationMaster'
             element={
               <ProtectedRoute>
                 <Suspense fallback={<div>Loading.....</div>}>
-                  <AddcalculationMaster />
+                  <AddPFcalculationMaster />
                 </Suspense>
               </ProtectedRoute>
             }
@@ -170,7 +170,7 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Suspense fallback={<div>Loading.....</div>}>
-                  <AddcalculationMaster />
+                  <AddPFcalculationMaster />
                 </Suspense>
               </ProtectedRoute>
             }

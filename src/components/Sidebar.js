@@ -9,12 +9,17 @@ import MonthYearDialog from "../components/calculationMaster/MonthYearDialog";  
 
 const Sidebar = ({ sideBarInFocus }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCalculationDropdownOpen, setIsCalculationDropdownOpen] = useState(false); // State for Calculation dropdown
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { companyName, companyId } = useSelector((state) => state.company);
   const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const toggleCalculationDropdown = () => {
+    setIsCalculationDropdownOpen(!isCalculationDropdownOpen); // Toggle Calculation dropdown
   };
 
   const openDialog = () => {
@@ -129,15 +134,33 @@ const Sidebar = ({ sideBarInFocus }) => {
           )}
         </div>
 
-        {/* Link for Calculations */}
-        <Link to="/calculationMasterTable">
-          <div className="w-full flex items-center gap-3 group-hover:pl-3 transition-all duration-300">
+        {/* Calculations Dropdown */}
+        <div className="w-full">
+          <div
+            className="w-full flex items-center gap-3 group-hover:pl-3 transition-all duration-300 cursor-pointer"
+            onClick={toggleCalculationDropdown}
+          >
             <AiFillCalculator className="text-white text-[25px]" />
             <p className="hidden group-hover:block text-white text-sm font-medium transition-all duration-300">
               Calculations
             </p>
+            {isCalculationDropdownOpen ? (
+              <FiChevronUp className="text-white hidden group-hover:block" />
+            ) : (
+              <FiChevronDown className="text-white hidden group-hover:block" />
+            )}
           </div>
-        </Link>
+          {isCalculationDropdownOpen && (
+            <div className="pl-6 mt-2 flex flex-col gap-3">
+              {/* Provident Fund (PF) */}
+              <p onClick={() => navigate("/providentFund")} className="text-white text-sm font-medium hover:text-gray-300 cursor-pointer">
+                Provident Fund (PF)
+              </p>
+
+              {/* Add other calculation options here */}
+            </div>
+          )}
+        </div>
 
         {/* Salary Calculations Link */}
         <div onClick={openDialog} className="w-full flex items-center gap-3 group-hover:pl-3 transition-all duration-300 cursor-pointer">

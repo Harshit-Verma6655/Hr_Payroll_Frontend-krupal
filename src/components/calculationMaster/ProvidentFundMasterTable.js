@@ -3,14 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../DashboardLayout';
 import RootLayout from '../RootLayout';
 import ConfirmDeleteDialog from '../../pages/ConfirmDeleteDialog'; // Import the dialog component
+import { useSelector } from 'react-redux';
 
-const CalculationMasterTable = () => {
+const ProvidentFundMasterTable = () => {
     const [calculationData, setCalculationData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
     const [selectedId, setSelectedId] = useState(null); // State to hold the selected item ID for deletion
     const navigate = useNavigate();
     const BASE_URL = process.env.REACT_APP_API_URL;
+    const { companyName, companyId } = useSelector((state) => state.company);
+    const active = "border-[4px] border-brand_b_color rounded-[20px] bg-[#F0F4F7] text-[20px] px-2 py-1 text-brand_color";
 
     // Fetch calculations function
     const fetchCalculations = async () => {
@@ -64,13 +67,16 @@ const CalculationMasterTable = () => {
         <RootLayout>
             <DashboardLayout>
                 <section className='w-full px-10 py-4'>
-                    <div className='flex justify-between mb-4'>
-                        <h2 className='text-xl font-semibold text-brand_color'>Calculation Master List</h2>
+                    <div className='w-full flex justify-between mb-4'>
+                        <h2 className='text-xl font-semibold text-brand_color'>Provident Fund List</h2>
+                        {companyName && (
+                            <button className={active}>{companyName}</button>
+                        )}
                         <button
-                            className='bg-blue-500 text-white px-4 py-2 rounded'
-                            onClick={() => navigate('/AddCalculationMaster')}
+                            className='bg-brand_colors text-white px-4 py-2 rounded hover:bg-opacity-80'
+                            onClick={() => navigate('/AddPFcalculationMaster')}
                         >
-                            Add Calculation
+                            Add Provident Fund
                         </button>
                     </div>
                     {loading ? (
@@ -151,4 +157,4 @@ const CalculationMasterTable = () => {
     );
 };
 
-export default CalculationMasterTable;
+export default ProvidentFundMasterTable;

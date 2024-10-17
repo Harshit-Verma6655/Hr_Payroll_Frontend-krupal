@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const BranchMasterTable = () => {
   const navigate = useNavigate();
-  const { companyName, companyId } = useSelector((state) => state.company);
+  const { companyName, companyId } = useSelector((state) => state.company);  
   const [AllBranchData, setAllBranchData] = useState([]);
   const active = "border-[4px] border-brand_b_color rounded-[20px] bg-[#F0F4F7] text-[20px] px-2 py-1 text-brand_color";
 
@@ -16,7 +16,7 @@ const BranchMasterTable = () => {
 
   const handleFetchBranch = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/branch/all`, {
+      const response = await axios.get(`${BASE_URL}/branch/all?CompanyId=${companyId}`, {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token if required
         },
