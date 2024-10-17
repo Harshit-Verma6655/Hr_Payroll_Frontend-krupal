@@ -48,7 +48,7 @@ const EmployeeMasterForm = ({ AllExpand, setEmployeeTab, handleEmployeeMasterCha
 
   const handleFetchAllContractor = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/contract/all`)
+      const response = await axios.get(`${BASE_URL}/contract/all?CompanyId=${companyId}`)
       const res = await response.data
       setContractorData(res)
 
