@@ -73,7 +73,7 @@ const BranchMasterForm = ({ AllExpand, notSave, handleChangebranchData, BranchDa
               <div className='w-[100%] flex gap-[40px]'>
                 <div className='flex flex-col gap-1 w-[100%]'>
                   <label className={LabelCss}>Branch No. </label>
-                  <input className={InputCss} type='number'
+                  <input className={InputCss} type='number' min="0"
                     name='Branch_No'
                     onChange={handleChangebranchData}
                     value={BranchData.Branch_No}
@@ -171,7 +171,7 @@ const BranchMasterForm = ({ AllExpand, notSave, handleChangebranchData, BranchDa
                 </div>
                 <div className='flex flex-col gap-1 w-[100%]'>
                   <label className={LabelCss}>Pin Code </label>
-                  <input className={InputCss} type='number'
+                  <input className={InputCss} type='number' min="0"
                     name='Pin_Code'
                     onChange={handleChangebranchData}
                     value={BranchData.Pin_Code}
@@ -367,13 +367,13 @@ const BranchMasterForm = ({ AllExpand, notSave, handleChangebranchData, BranchDa
             </div>
             <div className='flex flex-col gap-1 w-[100%]'>
             <label className={LabelCss}>ESIC Sub Code No. :</label>
-            <input className={InputCss} type='number' />
+            <input className={InputCss} type='number' min="0" />
             </div>
                 </div>
                 <div className='w-[100%] flex flex-col gap-1'>
                 <div className='flex flex-col gap-1 w-[100%]'>
             <label className={LabelCss}>PF Sub Code No. :</label>
-            <input className={InputCss} type='number' />
+            <input className={InputCss} type='number' min="0" />
             </div>
             <div className='flex flex-col gap-1 w-[100%]'>
             <label className={LabelCss}>Contact Person Name :</label>

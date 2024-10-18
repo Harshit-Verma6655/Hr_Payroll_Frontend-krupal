@@ -60,6 +60,7 @@ const EmployeeMaster = () => {
   })
   const [EmployeeSalary, setEmployeeSalary] = useState({
     Consolidated_Salary: "",
+    Consolidated_Pay_Rate: "",
     Pay_Rate: "",
     DA_Rate: "",
     Per_Hour_Calculation: "",
@@ -657,6 +658,7 @@ const EmployeeMaster = () => {
 
                       {/* Employee Salary Details */}
                       <td className="px-4 py-2 border">{item?.Consolidated_Salary}</td>
+                      <td className="px-4 py-2 border">{item?.Consolidated_Pay_Rate}</td>
                       <td className="px-4 py-2 border">{item?.Pay_Rate}</td>
                       <td className="px-4 py-2 border">{item?.DA_Rate}</td>
                       <td className="px-4 py-2 border">{item?.Per_Hour_Calculation}</td>

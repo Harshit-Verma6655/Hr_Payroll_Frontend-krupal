@@ -19,7 +19,7 @@ const ProvidentFundMasterTable = () => {
     const fetchCalculations = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${BASE_URL}/calculation-master/`);
+            const response = await fetch(`${BASE_URL}/calculation-master/get?CompanyId=${companyId}`);
             if (response.ok) {
                 const result = await response.json();
                 setCalculationData(result.data); // Accessing the 'data' field in the API response
@@ -121,7 +121,7 @@ const ProvidentFundMasterTable = () => {
                                             <td className='border-b_color border px-2 py-[6px]'>
                                                 <button
                                                     className='text-blue-500 hover:underline'
-                                                    onClick={() => navigate(`/EditCalculationMaster/${item.id}`)}
+                                                    onClick={() => navigate(`/EditCalculationMaster/${item._id}`)}
                                                 >
                                                     Edit
                                                 </button>

@@ -69,7 +69,7 @@ const ContractMasterForm = ({ AllExpand, notSave, handleContractData, ContractDa
               <div className='w-[100%] flex  gap-[40px]'>
                 <div className='flex flex-col gap-1 w-[100%]'>
                   <label className={LabelCss}>Contractor No. </label>
-                  <input className={InputCss} type='number'
+                  <input className={InputCss} type='number' min="0"
                     name="Contractor_No"
                     value={ContractData.Contractor_No}
                     onChange={handleContractData}
@@ -98,7 +98,7 @@ const ContractMasterForm = ({ AllExpand, notSave, handleContractData, ContractDa
 
               <div className='flex flex-col gap-1 w-[100%]'>
                 <label className={LabelCss}>No. of labour engaged</label>
-                <input className={InputCss} type='number'
+                <input className={InputCss} type='number' min="0"
                   name="No_of_labour_engaged"
                   value={ContractData.No_of_labour_engaged}
                   onChange={handleContractData}
@@ -140,7 +140,7 @@ const ContractMasterForm = ({ AllExpand, notSave, handleContractData, ContractDa
                 </div>
                 <div className='flex flex-col gap-1 w-[100%]'>
                   <label className={LabelCss}>Pin Code </label>
-                  <input className={InputCss} type='number'
+                  <input className={InputCss} type='number' min="0"
                     name="Pin_Code"
                     value={ContractData.Pin_Code}
                     onChange={handleContractData}
@@ -186,7 +186,7 @@ const ContractMasterForm = ({ AllExpand, notSave, handleContractData, ContractDa
               <div className='w-[100%] flex gap-[40px]'>
                 <div className='flex flex-col gap-1 w-[100%]'>
                   <label className={LabelCss}>Location Name</label>
-                  <input className={InputCss} type='number'
+                  <input className={InputCss} type='number' min="0"
                     name="Location_Name"
                     value={ContractData.Location_Name}
                     onChange={handleContractData}
@@ -194,7 +194,7 @@ const ContractMasterForm = ({ AllExpand, notSave, handleContractData, ContractDa
                 </div>
                 <div className='flex flex-col gap-1 w-[100%]'>
                   <label className={LabelCss}>Phone No.</label>
-                  <input className={InputCss} type='number'
+                  <input className={InputCss} type='number' min="0"
                     name="Phone_f"
                     value={ContractData.Phone_f}
                     onChange={handleContractData}
@@ -202,7 +202,7 @@ const ContractMasterForm = ({ AllExpand, notSave, handleContractData, ContractDa
                 </div>
                 <div className='flex flex-col gap-1 w-[100%]'>
                   <label className={LabelCss}>Mobile No.</label>
-                  <input className={InputCss} type='number'
+                  <input className={InputCss} type='number' min="0"
                     name="Mobile_No"
                     value={ContractData.Mobile_No}
                     onChange={handleContractData}

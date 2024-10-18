@@ -63,7 +63,7 @@ const LocationMasterForm = ({ AllExpand, notSave, LocationData, handleLocationDa
               <div className='w-[100%] flex  gap-[40px]'>
                 <div className='flex flex-col gap-1 w-[100%]'>
                   <label className={LabelCss}>Location No. </label>
-                  <input className={InputCss} type='number'
+                  <input className={InputCss} type='number' min="0"
                     name="Location_No"
                     value={LocationData.Location_No}
                     onChange={handleLocationData}
@@ -79,7 +79,7 @@ const LocationMasterForm = ({ AllExpand, notSave, LocationData, handleLocationDa
                 </div>
                 <div className='flex flex-col gap-1 w-[100%]'>
                   <label className={LabelCss}>Phone No. </label>
-                  <input className={InputCss} type='number'
+                  <input className={InputCss} type='number' min="0"
                     name="Phone_f"
                     value={LocationData.Phone_f}
                     onChange={handleLocationData}
@@ -120,7 +120,7 @@ const LocationMasterForm = ({ AllExpand, notSave, LocationData, handleLocationDa
                 </div>
                 <div className='flex flex-col gap-1 w-[100%]'>
                   <label className={LabelCss}>Pin Code </label>
-                  <input className={InputCss} type='number'
+                  <input className={InputCss} type='number' min="0"
                     name="Pin_Code"
                     value={LocationData.Pin_Code}
                     onChange={handleLocationData}

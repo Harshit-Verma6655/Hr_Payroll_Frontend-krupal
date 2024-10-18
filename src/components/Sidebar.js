@@ -153,7 +153,7 @@ const Sidebar = ({ sideBarInFocus }) => {
           {isCalculationDropdownOpen && (
             <div className="pl-6 mt-2 flex flex-col gap-3">
               {/* Provident Fund (PF) */}
-              <p onClick={() => navigate("/providentFund")} className="text-white text-sm font-medium hover:text-gray-300 cursor-pointer">
+              <p onClick={() => navigate("/providentFund")} className="hidden group-hover:block text-white text-sm font-medium transition-all duration-300 text-white text-sm font-medium hover:text-gray-300 cursor-pointer">
                 Provident Fund (PF)
               </p>
 

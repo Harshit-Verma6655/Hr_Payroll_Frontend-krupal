@@ -199,7 +199,7 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData, viewMode, set
             {/* <div className='w-[100%] flex gap-[40px] items-center'>
          <div className='flex gap-1 w-[100%]  flex-col'>
             <label className={LabelCss}>File No </label>
-            <input className={`border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]`} type='number' />
+            <input className={`border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]`} type='number' min="0" />
             </div>
             <div className='flex gap-1 w-[100%] flex-col'></div>
          </div> */}
@@ -243,7 +243,7 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData, viewMode, set
                 <label className={LabelCss}>Pin Code </label>
                 <input
                   className={`border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]`}
-                  type="number"
+                  type="number" min="0"
                   name='pincode' value={companyData.pincode} onChange={handleChange}
 
 
@@ -300,7 +300,7 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData, viewMode, set
                 <label className={LabelCss}>Pin code</label>
                 <input
                   className={`border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]`}
-                  type="number"
+                  type="number" min="0"
                   name='R_pincode' value={companyData.R_pincode} onChange={handleChange}
 
 
@@ -434,11 +434,11 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData, viewMode, set
             {/* <div className='w-[100%] flex gap-[40px] items-center'>
          <div className='flex flex-col gap-1 w-[100%]'>
             <label className={LabelCss}>Location Name </label>
-            <input className={InputCss} type='number' />
+            <input className={InputCss} type='number' min="0" />
             </div>
             <div className='flex flex-col gap-1 w-[100%]'>
             <label className={LabelCss}>Phone No. </label>
-            <input className={InputCss} type='number' />
+            <input className={InputCss} type='number' min="0" />
             </div>
          </div> */}
 
@@ -475,7 +475,7 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData, viewMode, set
                 <label className={LabelCss}>Bank A/C No. </label>
                 <input
                   className={`border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]`}
-                  type="number"
+                  type="number" min="0"
                   name='bank_account' value={companyData.bank_account} onChange={handleChange}
 
 

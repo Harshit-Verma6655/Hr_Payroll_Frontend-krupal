@@ -13,14 +13,15 @@ const MonthYearDialog = ({ isOpen, onCancel }) => {
 
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [workingDays, setWorkingDays] = useState(0); // New state for Working Days
 
     if (!isOpen) return null;
 
     const handleConfirm = () => {
         const month = months[selectedMonth];
         const year = selectedYear;
-        // Navigate to SalaryCalculationMaster with month and year as query params
-        navigate(`/SalaryCalculationMaster?month=${month}&year=${year}`);
+        // Navigate to SalaryCalculationMaster with month, year, and workingDays as query params
+        navigate(`/SalaryCalculationMaster?month=${month}&year=${year}&workingDays=${workingDays}`);
         // Close the dialog
         onCancel(); // Call onCancel to close the dialog
     };
@@ -56,6 +57,20 @@ const MonthYearDialog = ({ isOpen, onCancel }) => {
                             <option key={year} value={year}>{year}</option>
                         ))}
                     </select>
+                </div>
+
+                {/* New Working Days Input Field */}
+                <div className="mb-4">
+                    <label htmlFor="workingDays" className="block text-gray-700">Working Days:</label>
+                    <input
+                        id="workingDays"
+                        type="number" min="0"
+                        value={workingDays}
+                        onChange={(e) => setWorkingDays(parseInt(e.target.value))}
+                        className="border border-gray-300 rounded p-2 w-full text-black"
+                        min="0"
+                        max="31"
+                    />
                 </div>
 
                 <div className="flex justify-end gap-3">

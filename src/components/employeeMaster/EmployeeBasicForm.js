@@ -848,7 +848,7 @@ const EmployeeMasterForm = ({ AllExpand, setEmployeeTab, handleEmployeeMasterCha
             {/* <div className='w-[100%] flex gap-[40px] items-center'>
      <div className='flex flex-col gap-1 w-[100%]'>
         <label className={LabelCss}>PF Account No. </label>
-        <input className={InputCss} type='number' />
+        <input className={InputCss} type='number' min="0" />
         </div>
         <div className='w-[100%]' />
         <div className='flex flex-col gap-1 w-[100%]'>
@@ -880,7 +880,7 @@ const EmployeeMasterForm = ({ AllExpand, setEmployeeTab, handleEmployeeMasterCha
               </div>
               <div className='flex flex-col gap-1 w-[100%]'>
                 <label className={LabelCss}>Bank A/C No </label>
-                <input className={InputCss} type='number'
+                <input className={InputCss} type='number' min="0"
                   name='Bank_AC_No'
                   onChange={handleEmployeeMasterChange}
                   value={EmployeeData.Bank_AC_No}

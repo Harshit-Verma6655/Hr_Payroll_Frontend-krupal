@@ -8,7 +8,7 @@ import PasswordVerifyDialog from './PasswordVerifyDialog'; // Import the Passwor
 
 const EmployeeTable = () => {
   const navigate = useNavigate();
-  const [EmployeeDetails, setEmployeeDetails] = useState();
+  const [EmployeeDetails, setEmployeeDetails] = useState([]); // Initialize as an empty array
   const { companyName, companyId } = useSelector((state) => state.company);
   const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -19,13 +19,13 @@ const EmployeeTable = () => {
   const handleFetchCompanyEmployee = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/employee/employees/${companyId}`);
-      const res = await response.data;
-      setEmployeeDetails(res);
+      const { employees } = response.data; // Destructure to get employees
+      setEmployeeDetails(employees); // Set the employees to state
     } catch (error) {
       console.log(error);
     }
   };
-
+  
   useEffect(() => {
     if (companyId) {
       handleFetchCompanyEmployee();
@@ -54,7 +54,6 @@ const EmployeeTable = () => {
       return false; // Return false if there was an error
     }
   };
-
 
   const handlePasswordVerifyClose = async (isVerified) => {
     if (isVerified) {
@@ -108,7 +107,7 @@ const EmployeeTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {EmployeeDetails &&
+                {Array.isArray(EmployeeDetails) && EmployeeDetails.length > 0 ? (
                   EmployeeDetails.map((emp, index) => (
                     <tr key={index}>
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Sr_emp}</td>
@@ -130,7 +129,12 @@ const EmployeeTable = () => {
                         <button className='text-red-500 hover:underline ml-2' onClick={() => handleDeleteEmployee(emp?._id)}>Delete</button>
                       </td>
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="13" className='text-center py-4'>No employees available</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
