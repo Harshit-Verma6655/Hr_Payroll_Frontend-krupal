@@ -645,7 +645,7 @@ const SalaryCalculationMaster = () => {
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>Gross Deductions</label>
                                             <input
-                                                className={InputCss}
+                                                className={`${InputCss} bg-gray-200`}
                                                 type='number' min="0"
                                                 name='Gross Deductions'
                                                 value={formData.grossDeductions}

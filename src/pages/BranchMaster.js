@@ -155,7 +155,7 @@ const BranchMaster = () => {
         ...prevData,
         Branch_No: res?.nextBranchNo
       }))
-
+      handleViewBranch();
     } catch (error) {
       console.log(error)
     }

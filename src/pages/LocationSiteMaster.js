@@ -137,7 +137,7 @@ const LocationSiteMaster = () => {
       const res = await response.data
       console.log(res)
       setLocationData((preData) => ({ ...preData, }))
-
+      this.handleViewLocation();
     } catch (error) {
       console.log(error)
     }

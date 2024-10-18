@@ -329,33 +329,28 @@ const EmployeeMaster = () => {
     }
   };
 
-
-
-  //this below for the auto fetch 
-  useEffect(() => {
-    const fetchEmployeeData = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/employee/${employeeId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch employee data');
-        }
-        const employee = await response.json();
-        setEmployeeData(employee);
-        setEmployeeFamDetails(employee?.Employee_Family_Detail || {});
-        setEmployeeSalary(employee?.Employee_Salary || {});
-        setSonsDetails(employee?.Employee_Family_Detail?.SonsDetails || []);
-        setDaughterData(employee?.Employee_Family_Detail?.DaughterDetails || []);
-      } catch (error) {
-        console.error('Error fetching employee data:', error);
-      }
-    };
-
-    if (employeeId) {
-
-
-      fetchEmployeeData();
-    }
-  }, [employeeId]);
+  // //this below for the auto fetch 
+  // useEffect(() => {
+  //   const fetchEmployeeData = async () => {
+  //     try {
+  //       const response = await fetch(`${BASE_URL}/employee/${employeeId}`);
+  //       if (!response.ok) {
+  //         throw new Error('Failed to fetch employee data');
+  //       }
+  //       const employee = await response.json();
+  //       setEmployeeData(employee);
+  //       setEmployeeFamDetails(employee?.Employee_Family_Detail || {});
+  //       setEmployeeSalary(employee?.Employee_Salary || {});
+  //       setSonsDetails(employee?.Employee_Family_Detail?.SonsDetails || []);
+  //       setDaughterData(employee?.Employee_Family_Detail?.DaughterDetails || []);
+  //     } catch (error) {
+  //       console.error('Error fetching employee data:', error);
+  //     }
+  //   };
+  //   if (employeeId) {
+  //     fetchEmployeeData();
+  //   }
+  // }, [employeeId]);
 
   const handleFileUpload = async (e) => {
     let file = e.target.files[0];
@@ -406,22 +401,44 @@ const EmployeeMaster = () => {
   };
 
 
-  // const handleNextSrNumber = async()=>{
-  //   try{
-  //     const response = await axios.get(`${BASE_URL}/employee/next-employee-sr`)
-  //     const res = await response.data
-  //     console.log(res)
+  const handleNextSrNumber = async () => {
+    try {
+      // Fetch the next employee serial number
+      const response = await axios.get(`${BASE_URL}/employee/next-employee-sr`);
+      const res = response.data;
+      console.log(res);
 
-  //   }catch(error){
-  //     console.log(error)
-  //   }
-  // }
+      // Once successful, call fetchEmployeeData
+      if (res.success) {  // Assuming the response contains a success flag
+        await fetchEmployeeData();  // Call fetchEmployeeData here
+      }
+    } catch (error) {
+      console.error('Error fetching next employee serial number:', error);
+    }
+  };
 
-  // useEffect(()=>{
-  // if(viewmode!=="view"){
-  //   handleNextSrNumber()
-  // }
-  // },[viewmode])
+  const fetchEmployeeData = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/employee/${employeeId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch employee data');
+      }
+      const employee = await response.json();
+      setEmployeeData(employee);
+      setEmployeeFamDetails(employee?.Employee_Family_Detail || {});
+      setEmployeeSalary(employee?.Employee_Salary || {});
+      setSonsDetails(employee?.Employee_Family_Detail?.SonsDetails || []);
+      setDaughterData(employee?.Employee_Family_Detail?.DaughterDetails || []);
+    } catch (error) {
+      console.error('Error fetching employee data:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (viewmode !== "view") {
+      handleNextSrNumber()
+    }
+  }, [viewmode])
 
   const normalbtn = `border-[4px] border-[#D4DAE1] rounded-[20px] bg-[#F0F4F7] text-[20px] px-2 py-1 text-brand_color`;
   const active = "border-[4px] border-brand_b_color rounded-[20px] bg-[#F0F4F7] text-[20px] px-2 py-1 text-brand_color"
