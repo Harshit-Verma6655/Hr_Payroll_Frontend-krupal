@@ -93,7 +93,7 @@ const CompanyMaster = () => {
       edli_indicator: '',
       pf_application_date: '',
       esic_application_date: '',
-      glwf_application_date: '',
+      glwf_application_no: '',
       pt_employer: '',
       pt_employee: '',
       pt_applicable_date: '',
@@ -247,7 +247,7 @@ const CompanyMaster = () => {
           edli_indicator: CompanyFetchData.company_other_detail.edli_indicator || '',
           pf_application_date: CompanyFetchData.company_other_detail.pf_application_date || '',
           esic_application_date: CompanyFetchData.company_other_detail.esic_application_date || '',
-          glwf_application_date: CompanyFetchData.company_other_detail.glwf_application_date || '',
+          glwf_application_no: CompanyFetchData.company_other_detail.glwf_application_no || '',
           pt_employer: CompanyFetchData.company_other_detail.pt_employer || '',
           pt_employee: CompanyFetchData.company_other_detail.pt_employee || '',
           pt_applicable_date: CompanyFetchData.company_other_detail.pt_applicable_date || '',
@@ -525,7 +525,7 @@ const CompanyMaster = () => {
                       <td className="px-4 py-2 border">{item?.company_other_detail?.edli_indicator}</td>
                       <td className="px-4 py-2 border">{item?.company_other_detail?.pf_application_date}</td>
                       <td className="px-4 py-2 border">{item?.company_other_detail?.esic_application_date}</td>
-                      <td className="px-4 py-2 border">{item?.company_other_detail?.glwf_application_date}</td>
+                      <td className="px-4 py-2 border">{item?.company_other_detail?.glwf_application_no}</td>
                       <td className="px-4 py-2 border">{item?.company_other_detail?.pt_employer}</td>
                       <td className="px-4 py-2 border">{item?.company_other_detail?.pt_employee}</td>
                       <td className="px-4 py-2 border">{item?.company_other_detail?.pt_applicable_date}</td>

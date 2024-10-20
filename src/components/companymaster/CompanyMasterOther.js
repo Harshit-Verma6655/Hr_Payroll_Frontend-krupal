@@ -442,8 +442,8 @@ const CompanyMasterOther = ({AllExpand,handleChange,companyData,viewMode,Company
         <label className={LabelCss}>GLWF No.</label>
         <input className={InputCss} type='text' 
             onChange={handleChange}
-          value={companyData.company_other_detail.glwf_application_date}
-        name='company_other_detail.glwf_application_date'
+          value={companyData.company_other_detail.glwf_application_no}
+        name='company_other_detail.glwf_application_no'
         />
         </div>
      </div>

@@ -8,7 +8,7 @@ const SalaryCalculationMaster = () => {
     const LabelCss = "text-[#000000] font-[500] text-[18px] text-nowrap";
     const InputCss = "border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]";
     const { companyName, companyId } = useSelector((state) => state.company);
-    const active = "border-[4px] border-brand_b_color rounded-[20px] bg-[#F0F4F7] text-[20px] px-2 py-1 text-brand_color mb-3";
+    const active = "border-[4px] border-brand_b_color rounded-[20px] bg-[#F0F4F7] text-[20px] p-2 text-brand_color w-[20%]";
     const [employeeNames, setEmployeeNames] = useState([]);
     const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -114,13 +114,13 @@ const SalaryCalculationMaster = () => {
             const grossDeductions =
                 parseFloat(updatedData.loan || 0) +
                 parseFloat(updatedData.advance || 0) +
+                parseFloat(updatedData.professionalTax || 0) +
+                parseFloat(updatedData.tds || 0) +
                 parseFloat(updatedData.glwf || 0) +
                 parseFloat(updatedData.employeePF || 0) +
                 parseFloat(updatedData.employerPF || 0) +
-                parseFloat(updatedData.professionalTax || 0) +
                 parseFloat(updatedData.esic || 0) +
                 parseFloat(updatedData.employerESIC || 0) +
-                parseFloat(updatedData.tds || 0) +
                 parseFloat(updatedData.glwfEmployer || 0) +
                 parseFloat(updatedData.otherDeductions || 0) +
                 parseFloat(updatedData.familyPensionFund || 0);
@@ -276,34 +276,33 @@ const SalaryCalculationMaster = () => {
     return (
         <RootLayout>
             <DashboardLayout>
-                <section className='w-full px-20 py-10'>
-                    {companyName && (
-                        <button className={active}>{companyName}</button>
-                    )}
-                    <div className='w-[70%] text-white bg-brand_colors py-2 px-3 rounded flex gap-3 items-center '>
+                <section className='w-full p-5'>
+                    <div className='w-[80%] text-white bg-brand_colors py-2 px-3 rounded flex gap-3 items-center '>
                         <h2 className='text-[20px] font-bold'>Add Calculation Master</h2>
                     </div>
 
                     <form onSubmit={handleSubmit} className='w-full flex flex-wrap gap-4 mb-3'>
                         {/* Year/Month */}
-                        <div className='flex flex-wrap gap-5 w-[80%] mt-3'>
-
-                            <div className='w-[28%]'>
+                        <div className='flex gap-5 w-[80%] mt-3'>
+                            {companyName && (
+                                <button className={active}>{companyName}</button>
+                            )}
+                            <div className='w-[%]'>
                                 <label className={LabelCss}>Year</label>
                                 <input className={InputCss} type='text' name='year' value={formData.year} onChange={handleChange} readOnly />
                             </div>
-                            <div className='w-[28%]'>
+                            <div className='w-[%]'>
                                 <label className={LabelCss}>Month</label>
                                 <input className={InputCss} type='text' name='month' value={formData.month} onChange={handleChange} readOnly />
                             </div>
 
                             {/* Working Days */}
-                            <div className='w-[28%]'>
+                            <div className='w-[%]'>
                                 <label className={LabelCss}>Working Days</label>
                                 <input className={InputCss} type='number' min="0" name='workingDays' value={formData.workingDays} onChange={handleChange} readOnly />
                             </div>
                             {/* Employee Name */}
-                            <div>
+                            <div className='w-[%]'>
                                 <label className={LabelCss}>Employee Name</label>
                                 <select name="employeeName" value={formData.employeeName} onChange={handleEmployeeChange} className={InputCss}>
                                     <option value="">Select Employee</option>
@@ -314,14 +313,14 @@ const SalaryCalculationMaster = () => {
                             </div>
                         </div>
 
-                        <div className='w-[70%] flex gap-3'>
+                        <div className='w-[100%] flex gap-3'>
                             <div className='w-[50%]'>
                                 {/* Title Section */}
                                 <div className='w-[100%] text-white bg-brand_colors py-2 px-3 rounded flex gap-3 items-center'>
                                     <h2 className='text-[20px] font-bold'>Addition</h2>
                                 </div>
                                 {/* Main Content Section */}
-                                <div className='w-[100%] flex gap-4 mt-4'>
+                                <div className='w-[100%] flex gap-4 mt-1'>
                                     {/* Left Column - 50% */}
                                     <div className='w-[100%] flex flex-col gap-3'>
                                         {/* Payable Days */}
@@ -350,7 +349,8 @@ const SalaryCalculationMaster = () => {
                                             <label className={LabelCss}>HRA</label>
                                             <input className={InputCss} type='number' min="0" name='HRA' value={formData.HRA} onChange={handleChange} />
                                         </div>
-
+                                    </div>
+                                    <div className='w-[100%] flex flex-col gap-3'>
                                         {/* Travel Allowance */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>Traveling Allowance</label>
@@ -402,6 +402,9 @@ const SalaryCalculationMaster = () => {
                                             <input className={InputCss} type='number' min="0" name='allowance6' value={formData.allowance6} onChange={handleChange} />
                                         </div>
 
+                                    </div>
+                                    {/* Right Column - 50% */}
+                                    <div className='w-[100%] flex flex-col gap-3'>
                                         {/* Allowance 7 */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>Allowance 7</label>
@@ -430,7 +433,7 @@ const SalaryCalculationMaster = () => {
                                 </div>
 
                                 {/* Main Content Section */}
-                                <div className='w-[100%] flex gap-4 mt-4'>
+                                <div className='w-[100%] flex gap-4 mt-1'>
                                     {/* Left Column - 50% */}
                                     <div className='w-[100%] flex flex-col gap-3'>
                                         {/* Loan */}
@@ -444,15 +447,14 @@ const SalaryCalculationMaster = () => {
                                                 onChange={handleChange}
                                             />
                                         </div>
-
-                                        {/* GLWF */}
+                                        {/* Advance */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
-                                            <label className={LabelCss}>GLWF</label>
+                                            <label className={LabelCss}>Advance</label>
                                             <input
                                                 className={InputCss}
                                                 type='number' min="0"
-                                                name='glwf'
-                                                value={formData.glwf}
+                                                name='advance'
+                                                value={formData.advance}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -480,7 +482,8 @@ const SalaryCalculationMaster = () => {
                                                 onChange={handleChange}
                                             />
                                         </div>
-
+                                    </div>
+                                    <div className='w-[100%] flex flex-col gap-3'>
                                         {/* Employee PF */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>Employee PF</label>
@@ -504,7 +507,17 @@ const SalaryCalculationMaster = () => {
                                                 onChange={handleChange}
                                             />
                                         </div>
-
+                                        {/* GLWF */}
+                                        <div className='flex flex-col gap-1 w-[100%]'>
+                                            <label className={LabelCss}>GLWF</label>
+                                            <input
+                                                className={InputCss}
+                                                type='number' min="0"
+                                                name='glwf'
+                                                value={formData.glwf}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
                                         {/* GLWF Employer */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>GLWF Employer</label>
@@ -516,7 +529,9 @@ const SalaryCalculationMaster = () => {
                                                 onChange={handleChange}
                                             />
                                         </div>
-
+                                    </div>
+                                    {/* Right Column - 50% */}
+                                    <div className='w-[100%] flex flex-col gap-3'>
                                         {/* ESIC */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>ESIC</label>
@@ -540,23 +555,6 @@ const SalaryCalculationMaster = () => {
                                                 onChange={handleChange}
                                             />
                                         </div>
-                                    </div>
-
-                                    {/* Right Column - 50% */}
-                                    <div className='w-[100%] flex flex-col gap-3'>
-
-                                        {/* Advance */}
-                                        <div className='flex flex-col gap-1 w-[100%]'>
-                                            <label className={LabelCss}>Advance</label>
-                                            <input
-                                                className={InputCss}
-                                                type='number' min="0"
-                                                name='advance'
-                                                value={formData.advance}
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-
                                         {/* AC 1 */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>AC 1</label>
@@ -580,7 +578,8 @@ const SalaryCalculationMaster = () => {
                                                 onChange={handleChange}
                                             />
                                         </div>
-
+                                    </div>
+                                    <div className='w-[100%] flex flex-col gap-3'>
                                         {/* AC 10 */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>AC 10</label>
@@ -628,10 +627,9 @@ const SalaryCalculationMaster = () => {
                                                 onChange={handleChange}
                                             />
                                         </div>
-
                                         {/* Family Pension Fund */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
-                                            <label className={LabelCss}>Family Pension Fund</label>
+                                            <label className={LabelCss}>FPF</label>
                                             <input
                                                 className={InputCss}
                                                 type='number' min="0"
@@ -640,56 +638,53 @@ const SalaryCalculationMaster = () => {
                                                 onChange={handleChange}
                                             />
                                         </div>
-
-                                        {/* Gross Deductions */}
-                                        <div className='flex flex-col gap-1 w-[100%]'>
-                                            <label className={LabelCss}>Gross Deductions</label>
-                                            <input
-                                                className={`${InputCss} bg-gray-200`}
-                                                type='number' min="0"
-                                                name='Gross Deductions'
-                                                value={formData.grossDeductions}
-                                                onChange={handleChange}
-                                            />
-                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div className='w-[50%]'>
+                                <div className='w-[100%] text-white bg-brand_colors py-2 px-3 rounded flex gap-3 items-center'>
+                                    <h2 className='text-[20px] font-bold'>Total Calculation</h2>
+                                </div>
+                                {/* Gross Deductions */}
+                                <div className='w-[100%]'>
+                                    <label className={LabelCss}>Gross Deductions</label>
+                                    <input
+                                        className={`${InputCss} bg-gray-200`}
+                                        type='number' min="0"
+                                        name='Gross Deductions'
+                                        value={formData.grossDeductions}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                {/* Gross Salary */}
+                                <div className='w-[100%]'>
+                                    <label className={LabelCss}>Gross Earning</label>
+                                    <input
+                                        className={`${InputCss} bg-gray-200`} // make it read-only
+                                        type='number' min="0"
+                                        name='grossEarnings'
+                                        value={formData.grossEarnings}
+                                        readOnly
+                                    />
+                                </div>
+
+                                {/* Net Amount */}
+                                <div className='w-[100%]'>
+                                    <label className={LabelCss}>Net Amount</label>
+                                    <input
+                                        className={`${InputCss} bg-gray-200`} // make it read-only
+                                        type='number' min="0"
+                                        name='netAmount'
+                                        value={formData.netAmount}
+                                        readOnly
+                                    />
+                                </div>
+                                {/* Save and Clear buttons */}
+                                <button className='bg-brand_colors text-white px-4 py-2 rounded hover:bg-opacity-80 mt-3 mr-3' type='submit'>Save</button>
+                                <button className='bg-gray-500 text-white px-4 py-2 rounded mt-3' type='reset'>Clear</button>
+                            </div>
                         </div>
                     </form>
-                    <div className='w-[100%] text-white bg-brand_colors py-2 px-3 rounded flex gap-3 items-center'>
-                        <h2 className='text-[20px] font-bold'>Total Calculation</h2>
-                    </div>
-                    <div className='w-[100%] flex gap-3 mt-3'>
-                        {/* Gross Salary */}
-                        <div className='w-[50%]'>
-                            <label className={LabelCss}>Gross Earning</label>
-                            <input
-                                className={`${InputCss} bg-gray-200`} // make it read-only
-                                type='number' min="0"
-                                name='grossEarnings'
-                                value={formData.grossEarnings}
-                                readOnly
-                            />
-                        </div>
-
-                        {/* Net Amount */}
-                        <div className='w-[50%]'>
-                            <label className={LabelCss}>Net Amount</label>
-                            <input
-                                className={`${InputCss} bg-gray-200`} // make it read-only
-                                type='number' min="0"
-                                name='netAmount'
-                                value={formData.netAmount}
-                                readOnly
-                            />
-                        </div>
-                    </div>
-                    {/* Save and Clear buttons */}
-                    <div className='flex gap-4 mt-3'>
-                        <button className='bg-brand_colors text-white px-4 py-2 rounded hover:bg-opacity-80' type='submit'>Save</button>
-                        <button className='bg-gray-500 text-white px-4 py-2 rounded' type='reset'>Clear</button>
-                    </div>
                 </section>
             </DashboardLayout>
         </RootLayout >

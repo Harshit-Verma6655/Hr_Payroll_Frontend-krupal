@@ -1,87 +1,98 @@
 import React, { useEffect, useState } from 'react';
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
-const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary, EmployeeSalary }) => {
-  const [BasicSalaryDetails, setBasicSalaryDetails] = useState(true)
-  //   const [Allowances, setAllowances] = useState(false)
-  //   const [TotalEarnings, setTotalEarnings] = useState(false)
+const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary, EmployeeSalary, setEmployeeSalary }) => {
+  const [BasicSalaryDetails, setBasicSalaryDetails] = useState(true);
   const InformationBox = "w-[100%] border-[4px] border-[#D4DAE1] rounded p-3 mt-[2px]"
   const ReactIcon = 'text-white text-[24px] cursor-pointer'
   const LabelCss = "text-[#000000] font-[500] text-[18px] w-[auto] text-nowrap"
   const InputCss = "border-[#000000] border-[1px] outline-none rounded-[8px] py-1 px-2 w-[100%]"
-  //   useEffect(() => {
-  //     if (AllExpand === true) {
-  //       setBasicSalaryDetails(true)
-  //     } else {
-  //       setBasicSalaryDetails(true)
-  //     }
-  //   }, [AllExpand])
 
-  const [values, setValues] = useState({
-    Consolidated_Salary: "",
-    Consolidated_Pay_Rate: "",
-    Pay_Rate: "",
-    DA_Rate: "",
-    Per_Hour_Calculation: "",
-    Pice_Rate_Calculation: "",
-    HRA: "",
-    Conveyance: "",
-    Travelling_Allowance: "",
-    W_LA: "",
-    Special_Allowance: "",
-    Difference_Pay: "",
-    Allowance_Name_5: "",
-    Amount_Name_5: "",
-    Allowance_Name_6: "",
-    Amount_Name_6: "",
-    Allowance_Name_7: "",
-    Amount_Name_7: "",
-    Allowance_Name_8: "",
-    Amount_Name_8: "",
-    Other_Name: "",
-    Other_Amount: ""
+  // Function to calculate Gross_Salary based on the provided values
+  const calculateGrossSalary = (updatedValues) => {
+    const salaryFields = [
+      'Consolidated_Salary', 'Pay_Rate', 'DA_Rate', 'Per_Hour_Calculation',
+      'Pice_Rate_Calculation', 'HRA', 'Conveyance', 'Travelling_Allowance',
+      'W_LA', 'Special_Allowance', 'Difference_Pay', 'Amount_Name_5',
+      'Amount_Name_6', 'Amount_Name_7', 'Amount_Name_8', 'Other_Amount'
+    ];
+
+    let grossSalary = 0;
+
+    // Scenario 1: If Pay_Rate is provided, calculate Gross_Salary as Pay_Rate * 26
+    if (updatedValues.Pay_Rate) {
+      grossSalary = Number(updatedValues.Pay_Rate) * 26;
+    }
+
+    // Scenario 2: If Consolidated_Salary is provided, it overrides Pay_Rate
+    if (updatedValues.Consolidated_Salary) {
+      grossSalary = Number(updatedValues.Consolidated_Salary);
+    }
+
+    // Calculate the sum of allowances
+    const allowancesTotal = salaryFields.slice(2) // Exclude 'Consolidated_Salary' and 'Pay_Rate'
+      .map(field => parseFloat(updatedValues[field]) || 0)
+      .reduce((acc, curr) => acc + curr, 0);
+
+    // Add the allowance total to the gross salary
+    return grossSalary + allowancesTotal;
+  };
+
+  // Initialize state with calculated Gross_Salary
+  const [values, setValues] = useState(() => {
+    const initialValues = {
+      Consolidated_Salary: "" || EmployeeSalary?.Consolidated_Salary,
+      Consolidated_Pay_Rate: "" || (EmployeeSalary?.Consolidated_Salary / 26),
+      Pay_Rate: "" || EmployeeSalary?.Pay_Rate,
+      DA_Rate: "" || EmployeeSalary?.DA_Rate,
+      Per_Hour_Calculation: "" || EmployeeSalary?.Per_Hour_Calculation,
+      Pice_Rate_Calculation: "" || EmployeeSalary?.Pice_Rate_Calculation,
+      HRA: "" || EmployeeSalary?.HRA,
+      Conveyance: "" || EmployeeSalary?.Conveyance,
+      Travelling_Allowance: "" || EmployeeSalary?.Travelling_Allowance,
+      W_LA: "" || EmployeeSalary?.W_LA,
+      Special_Allowance: "" || EmployeeSalary?.Special_Allowance,
+      Difference_Pay: "" || EmployeeSalary?.Difference_Pay,
+      Allowance_Name_5: "" || EmployeeSalary?.Allowance_Name_5,
+      Amount_Name_5: "" || EmployeeSalary?.Amount_Name_5,
+      Allowance_Name_6: "" || EmployeeSalary?.Allowance_Name_6,
+      Amount_Name_6: "" || EmployeeSalary?.Amount_Name_6,
+      Allowance_Name_7: "" || EmployeeSalary?.Allowance_Name_7,
+      Amount_Name_7: "" || EmployeeSalary?.Amount_Name_7,
+      Allowance_Name_8: "" || EmployeeSalary?.Allowance_Name_8,
+      Amount_Name_8: "" || EmployeeSalary?.Amount_Name_8,
+      Other_Name: "" || EmployeeSalary?.Other_Name,
+      Other_Amount: "" || EmployeeSalary?.Other_Amount,
+    };
+
+    // Calculate Gross_Salary for the initial state
+    initialValues.Gross_Salary = calculateGrossSalary(initialValues);
+
+    return initialValues;
   });
-  const [total, setTotal] = useState("");
 
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setValues((prevValues) => {
       const updatedValues = { ...prevValues, [name]: value };
 
-      // Define the fields that should be part of the total calculation (numeric fields only)
-      const allowanceFields = [
-        'DA_Rate', 'Per_Hour_Calculation', 'Pice_Rate_Calculation', 'HRA',
-        'Conveyance', 'Travelling_Allowance', 'W_LA', 'Special_Allowance',
-        'Difference_Pay', 'Amount_Name_5', 'Amount_Name_6',
-        'Amount_Name_7', 'Amount_Name_8', 'Other_Amount'
-      ];
-
-      let newTotal = 0;
-
-      // Scenario 1: If Pay_Rate is provided, calculate Gross_Salary as Pay_Rate * 26
-      if (updatedValues.Pay_Rate) {
-        newTotal = Number(updatedValues.Pay_Rate) * 26;
-      }
-
-      // Scenario 2: If Consolidated_Salary is provided, it overrides Pay_Rate
-      if (updatedValues.Consolidated_Salary) {
-        newTotal = Number(updatedValues.Consolidated_Salary);
-      }
-      // Scenario 3: If Consolidated_Pay_Rate is provided, calculate Gross_Salary as pay rate / 26
+      // If the name is 'Consolidated_Salary', update 'Consolidated_Pay_Rate'
+      // If the name is 'Consolidated_Salary', update 'Consolidated_Pay_Rate'
       if (name === 'Consolidated_Salary') {
-        updatedValues.Consolidated_Pay_Rate = value ? (Number(value) / 26).toFixed(2) : ""; // Update the pay rate accordingly
+        const newConsolidatedPayRate = value ? (Number(value) / 26).toFixed(2) : "";
+
+        updatedValues.Consolidated_Pay_Rate = newConsolidatedPayRate;
+
+        // Update the EmployeeSalary state as well
+        setEmployeeSalary((prevData) => ({
+          ...prevData,
+          Consolidated_Pay_Rate: newConsolidatedPayRate
+        }));
       }
-      // Add allowances to the Gross_Salary
-      const allowancesTotal = allowanceFields
-        .map(field => updatedValues[field] || 0) // Default to 0 if the field is empty
-        .reduce((acc, curr) => acc + Number(curr), 0);
 
-      // Final Gross_Salary calculation with allowances
-      newTotal += allowancesTotal;
-
-      // Update the total state (Gross_Salary)
-      setTotal(newTotal || ""); // Avoid displaying 0 when all fields are empty
+      // Recalculate Gross_Salary
+      updatedValues.Gross_Salary = calculateGrossSalary(updatedValues);
 
       return updatedValues;
     });
@@ -105,7 +116,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Consolidated Salary </label>
                 <input className={InputCss} type='number' min="0"
                   name="Consolidated_Salary"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Consolidated_Salary}
                   disabled={values.Pay_Rate > "0"}
                 />
@@ -115,7 +129,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}> Consolidated Pay Rate </label>
                 <input className={InputCss} type='number' min="0"
                   name="Consolidated_Pay_Rate"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Consolidated_Pay_Rate}
                   disabled={values.Consolidated_Salary > "0"}
                 />
@@ -124,19 +141,25 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Pay Rate </label>
                 <input className={InputCss} type='number' min="0"
                   name="Pay_Rate"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Pay_Rate}
                   disabled={values.Consolidated_Salary > "0"}
                 />
 
               </div>
               <div className='flex flex-col gap-1 w-[100%]'>
-                <label className={LabelCss}>DA Rate </label>
+                <label className={LabelCss}>DA Rate</label>
                 <input className={InputCss} type='number' min="0"
                   name="DA_Rate"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.DA_Rate}
-                  disabled={values.Consolidated_Salary > "0"}
+                  disabled={Number(values.Consolidated_Salary) > 0}
                 />
               </div>
             </div>
@@ -145,7 +168,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Per Hour Calculation </label>
                 <input className={InputCss} type='number' min="0"
                   name="Per_Hour_Calculation"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Per_Hour_Calculation}
                   disabled={values.Consolidated_Salary > "0"}
                 />
@@ -154,7 +180,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Pice Rate Calculation </label>
                 <input className={InputCss} type='number' min="0"
                   name="Pice_Rate_Calculation"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Pice_Rate_Calculation}
                   disabled={values.Consolidated_Salary > "0"}
                 />
@@ -168,7 +197,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>HRA </label>
                 <input className={InputCss} type='number' min="0"
                   name="HRA"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.HRA}
                 />
               </div>
@@ -176,7 +208,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Conveyance </label>
                 <input className={InputCss} type='number' min="0"
                   name="Conveyance"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Conveyance}
                 />
 
@@ -185,7 +220,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Travelling Allowance </label>
                 <input className={InputCss} type='number' min="0"
                   name="Travelling_Allowance"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Travelling_Allowance}
                 />
               </div>
@@ -195,7 +233,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>W&LA</label>
                 <input className={InputCss} type='number' min="0"
                   name="W_LA"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.W_LA}
                 />
               </div>
@@ -203,7 +244,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={`text-[#000000] font-[500] text-[18px] w-[100%] `}>Special Allowance </label>
                 <input className={InputCss} type='number' min="0"
                   name="Special_Allowance"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Special_Allowance}
                 />
               </div>
@@ -211,7 +255,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Difference Of Pay</label>
                 <input className={InputCss} type='number' min="0"
                   name="Difference_Pay"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Difference_Pay}
                 />
 
@@ -220,9 +267,12 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
             <div className='w-[100%] flex gap-[40px] items-center mt-3'>
               <div className='flex flex-col gap-1 w-[100%]'>
                 <label className={LabelCss}>Allowance Name 5 </label>
-                <input className={InputCss} type='number' min="0"
+                <input className={InputCss} type='text' min="0"
                   name="Allowance_Name_5"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Allowance_Name_5}
                 />
               </div>
@@ -230,7 +280,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Amount Name 5 </label>
                 <input className={InputCss} type='number' min="0"
                   name="Amount_Name_5"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Amount_Name_5}
                 />
               </div>
@@ -260,9 +313,12 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
             <div className='w-[100%] flex gap-[40px] items-center mt-3'>
               <div className='flex flex-col gap-1 w-[100%]'>
                 <label className={LabelCss}>Allowance Name 6 </label>
-                <input className={InputCss} type='number' min="0"
+                <input className={InputCss} type='text' min="0"
                   name="Allowance_Name_6"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Allowance_Name_6}
                 />
               </div>
@@ -270,7 +326,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Amount Name 6 </label>
                 <input className={InputCss} type='number' min="0"
                   name="Amount_Name_6"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Amount_Name_6}
                 />
               </div>
@@ -280,9 +339,12 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
             <div className='w-[100%] flex gap-[40px] items-center mt-3'>
               <div className='flex flex-col gap-1 w-[100%]'>
                 <label className={LabelCss}>Allowance Name 7 </label>
-                <input className={InputCss} type='number' min="0"
+                <input className={InputCss} type='text' min="0"
                   name="Allowance_Name_7"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Allowance_Name_7}
                 />
               </div>
@@ -290,7 +352,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Amount Name 7 </label>
                 <input className={InputCss} type='number' min="0"
                   name="Amount_Name_7"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Amount_Name_7}
                 />
               </div>
@@ -300,9 +365,12 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
             <div className='w-[100%] flex gap-[40px] items-center mt-3'>
               <div className='flex flex-col gap-1 w-[100%]'>
                 <label className={LabelCss}>Allowance Name 8 </label>
-                <input className={InputCss} type='number' min="0"
+                <input className={InputCss} type='text' min="0"
                   name="Allowance_Name_8"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Allowance_Name_8}
                 />
               </div>
@@ -310,7 +378,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Amount Name 8 </label>
                 <input className={InputCss} type='number' min="0"
                   name="Amount_Name_8"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Amount_Name_8}
                 />
               </div>
@@ -322,7 +393,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Other Name</label>
                 <input className={InputCss} type='number' min="0"
                   name="Other_Name"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Other_Name}
                 />
               </div>
@@ -330,7 +404,10 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
                 <label className={LabelCss}>Other Amount</label>
                 <input className={InputCss} type='number' min="0"
                   name="Other_Amount"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
                   value={values.Other_Amount}
                 />
               </div>
@@ -342,11 +419,15 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
             <div className='w-[100%] flex gap-[50px] items-center'>
               <div className='flex flex-col gap-1 w-[100%]'>
                 <label className={LabelCss}>Gross Salary </label>
-                <input className={InputCss} type='number' min="0"
+                <input className={InputCss}
+                  type='number'
+                  min="0"
                   name="Gross_Salary"
-                  onChange={handleChange}
-                  //   value={EmployeeSalary?.Gross_Salary}
-                  value={total}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleEmployeeSalary(e);
+                  }}
+                  value={values.Gross_Salary} // Use values.Gross_Salary to show the calculated total
                   readOnly
                 />
               </div>

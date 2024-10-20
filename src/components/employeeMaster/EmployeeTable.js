@@ -98,6 +98,7 @@ const EmployeeTable = () => {
                   <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Birth date</th>
                   <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Joining date</th>
                   <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Basic pay</th>
+                  <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Pay_Rate</th>
                   <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Rate DA</th>
                   <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Rate HRA</th>
                   <th className='border-b_color border px-2 py-[6px] text-left text-brand_color text-[14px]'>Conveyance</th>
@@ -116,12 +117,13 @@ const EmployeeTable = () => {
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Designation_Name}</td>
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Birth_Date}</td>
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Joining_Date}</td>
-                      <td className='border-b_color border px-2 py-[6px]'>{emp?.Employee_Salary?.Gross_Salary}</td>
+                      <td className='border-b_color border px-2 py-[6px]'>{emp?.Employee_Salary?.Consolidated_Salary}</td>
+                      <td className='border-b_color border px-2 py-[6px]'>{emp?.Employee_Salary?.Pay_Rate}</td>
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Employee_Salary?.DA_Rate}</td>
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Employee_Salary?.HRA}</td>
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Employee_Salary?.Conveyance}</td>
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Employee_Salary?.Travelling_Allowance}</td>
-                      <td className='border-b_color border px-2 py-[6px]'>{emp?.Employee_Salary?.Other_Amount}</td>
+                      <td className='border-b_color border px-2 py-[6px]'>{emp?.Employee_Salary?.Special_Allowance}</td>
                       <td className='border-b_color border px-2 py-[6px] '>
                         <button className='text-blue-500 hover:underline' onClick={() => {
                           navigate("/employeemaster", { state: { empid: emp?._id, viewmode: "view" } });

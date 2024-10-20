@@ -148,6 +148,7 @@ const EmployeeMaster = () => {
 
   const handleEmployeeSalary = (event) => {
     const { name, value } = event.target;
+    console.log(value, name)
     setEmployeeSalary(prevData => ({
       ...prevData,
       [name]: value,
@@ -329,28 +330,28 @@ const EmployeeMaster = () => {
     }
   };
 
-  // //this below for the auto fetch 
-  // useEffect(() => {
-  //   const fetchEmployeeData = async () => {
-  //     try {
-  //       const response = await fetch(`${BASE_URL}/employee/${employeeId}`);
-  //       if (!response.ok) {
-  //         throw new Error('Failed to fetch employee data');
-  //       }
-  //       const employee = await response.json();
-  //       setEmployeeData(employee);
-  //       setEmployeeFamDetails(employee?.Employee_Family_Detail || {});
-  //       setEmployeeSalary(employee?.Employee_Salary || {});
-  //       setSonsDetails(employee?.Employee_Family_Detail?.SonsDetails || []);
-  //       setDaughterData(employee?.Employee_Family_Detail?.DaughterDetails || []);
-  //     } catch (error) {
-  //       console.error('Error fetching employee data:', error);
-  //     }
-  //   };
-  //   if (employeeId) {
-  //     fetchEmployeeData();
-  //   }
-  // }, [employeeId]);
+  //this below for the auto fetch 
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/employee/${employeeId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch employee data');
+        }
+        const employee = await response.json();
+        setEmployeeData(employee);
+        setEmployeeFamDetails(employee?.Employee_Family_Detail || {});
+        setEmployeeSalary(employee?.Employee_Salary || {});
+        setSonsDetails(employee?.Employee_Family_Detail?.SonsDetails || []);
+        setDaughterData(employee?.Employee_Family_Detail?.DaughterDetails || []);
+      } catch (error) {
+        console.error('Error fetching employee data:', error);
+      }
+    };
+    if (employeeId) {
+      fetchEmployeeData();
+    }
+  }, [employeeId]);
 
   const handleFileUpload = async (e) => {
     let file = e.target.files[0];
@@ -400,22 +401,38 @@ const EmployeeMaster = () => {
     }
   };
 
-
   const handleNextSrNumber = async () => {
     try {
-      // Fetch the next employee serial number
-      const response = await axios.get(`${BASE_URL}/employee/next-employee-sr`);
-      const res = response.data;
-      console.log(res);
+      const response = await axios.get(`${BASE_URL}/employee/employee/next-serial`);
+      const res = await response.data
+      setEmployeeData((prevdata) => ({
+        ...prevdata,
+        Sr_emp: res.nextSrEmp
+      }))
 
       // Once successful, call fetchEmployeeData
       if (res.success) {  // Assuming the response contains a success flag
         await fetchEmployeeData();  // Call fetchEmployeeData here
       }
     } catch (error) {
-      console.error('Error fetching next employee serial number:', error);
+      console.log(error)
     }
-  };
+  }
+  // const handleNextSrNumber = async () => {
+  //   try {
+  //     // Fetch the next employee serial number
+  //     const response = await axios.get(`${BASE_URL}/employee/employee/next-serial`);
+  //     const res = response.data;
+  //     console.log(res);
+
+  //     // Once successful, call fetchEmployeeData
+  //     if (res.success) {  // Assuming the response contains a success flag
+  //       await fetchEmployeeData();  // Call fetchEmployeeData here
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching next employee serial number:', error);
+  //   }
+  // };
 
   const fetchEmployeeData = async () => {
     try {
@@ -449,7 +466,7 @@ const EmployeeMaster = () => {
       case 0:
         return <EmployeeMasterForm setEmployeeProfileImage={setEmployeeProfileImage} setEmployeeSign={setEmployeeSign} AllExpand={AllExpand} handleEmployeeMasterChange={handleEmployeeMasterChange} EmployeeData={EmployeeData} setEmployeeTab={setEmployeeTab} />;
       case 1:
-        return <EmployeeMasterSalary AllExpand={AllExpand} handleEmployeeSalary={handleEmployeeSalary} EmployeeSalary={EmployeeSalary} setEmployeeTab={setEmployeeTab} />;
+        return <EmployeeMasterSalary AllExpand={AllExpand} handleEmployeeSalary={handleEmployeeSalary} EmployeeSalary={EmployeeSalary} setEmployeeTab={setEmployeeTab} setEmployeeSalary={setEmployeeSalary} />;
       case 2:
         return <EmployeeMasterDetailsFam AllExpand={AllExpand} SonsDetails={SonsDetails} setDaughterData={setDaughterData} setSonsDetails={setSonsDetails} DaughterData={DaughterData} notSave={location.state} setEmployeeTab={setEmployeeTab} handleEmployeeFamily={handleEmployeeFamily} EmployeeFamDetails={EmployeeFamDetails} handleSubmitEmployee={handleSubmitEmployee} setEmployeeFamDetails={setEmployeeFamDetails} handleUpdateEmployee={handleUpdateEmployee} viewmode={viewmode} />;
       default:
