@@ -4,28 +4,32 @@ import DashboardLayout from '../DashboardLayout';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import PasswordVerifyDialog from './PasswordVerifyDialog'; // Import the PasswordVerifyDialog component
+import PasswordVerifyDialog from './PasswordVerifyDialog';
 
 const EmployeeTable = () => {
   const navigate = useNavigate();
-  const [EmployeeDetails, setEmployeeDetails] = useState([]); // Initialize as an empty array
+  const [EmployeeDetails, setEmployeeDetails] = useState([]);
   const { companyName, companyId } = useSelector((state) => state.company);
   const BASE_URL = process.env.REACT_APP_API_URL;
 
-  const [showPasswordDialog, setShowPasswordDialog] = useState(false); // State to manage dialog visibility
-  const [currentEmployeeId, setCurrentEmployeeId] = useState(null); // Store the ID of the employee to be deleted
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [currentEmployeeId, setCurrentEmployeeId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [employeesPerPage] = useState(10); // Show 10 employees per page
+
   const active = "border-[4px] border-brand_b_color rounded-[20px] bg-[#F0F4F7] text-[20px] px-2 py-1 text-brand_color";
 
   const handleFetchCompanyEmployee = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/employee/employees/${companyId}`);
-      const { employees } = response.data; // Destructure to get employees
-      setEmployeeDetails(employees); // Set the employees to state
+      const { employees } = response.data;
+      setEmployeeDetails(employees);
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   useEffect(() => {
     if (companyId) {
       handleFetchCompanyEmployee();
@@ -33,43 +37,58 @@ const EmployeeTable = () => {
   }, [companyId]);
 
   const handleDeleteEmployee = (employeeId) => {
-    setCurrentEmployeeId(employeeId); // Set the current employee ID
-    setShowPasswordDialog(true); // Show the password dialog
+    setCurrentEmployeeId(employeeId);
+    setShowPasswordDialog(true);
   };
 
   const verifyPassword = async (password) => {
     try {
-      const userData = JSON.parse(localStorage.getItem('userData')); // Retrieve user data from localStorage
-      const userId = userData?._id; // Extract user ID from userData
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      const userId = userData?._id;
 
-      // Ensure the password and userId are being sent correctly
       const response = await axios.post(`${BASE_URL}/users/verify-password`, {
-        _id: userId,  // Sending the correct field '_id'
-        password,     // Sending the password field
+        _id: userId,
+        password,
       });
 
-      return response.status === 200; // Return true if password is valid
+      return response.status === 200;
     } catch (error) {
       console.log("Error verifying password:", error);
-      return false; // Return false if there was an error
+      return false;
     }
   };
 
   const handlePasswordVerifyClose = async (isVerified) => {
     if (isVerified) {
-      // If verified, proceed to delete the employee
       try {
         const response = await axios.delete(`${BASE_URL}/employee/${currentEmployeeId}`);
         console.log("Employee deleted:", response.data);
-        // After deletion, fetch the updated employee list
-        await handleFetchCompanyEmployee(); // Refresh the employee list
+        await handleFetchCompanyEmployee();
       } catch (error) {
         console.log("Error deleting employee:", error);
       }
     }
-    setShowPasswordDialog(false); // Close the dialog
-    setCurrentEmployeeId(null); // Clear the employee ID
+    setShowPasswordDialog(false);
+    setCurrentEmployeeId(null);
   };
+
+  // Search handler
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Pagination handlers
+  const indexOfLastEmployee = currentPage * employeesPerPage;
+  const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
+  const currentEmployees = EmployeeDetails.slice(indexOfFirstEmployee, indexOfLastEmployee);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Filter employees based on the search term
+  const filteredEmployees = currentEmployees.filter((employee) =>
+    employee?.Name_on_Aadhar?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    employee?.Employee_Code?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <RootLayout>
@@ -85,6 +104,17 @@ const EmployeeTable = () => {
                 Add Employee +
               </button>
             )}
+          </div>
+
+          {/* Search input */}
+          <div className='mb-4'>
+            <input
+              type='text'
+              placeholder='Search by name or emp code'
+              className="px-4 py-2 border rounded"
+              value={searchTerm}
+              onChange={handleSearch}
+            />
           </div>
 
           <div className='overflow-x-auto'>
@@ -108,8 +138,8 @@ const EmployeeTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(EmployeeDetails) && EmployeeDetails.length > 0 ? (
-                  EmployeeDetails.map((emp, index) => (
+                {filteredEmployees.length > 0 ? (
+                  filteredEmployees.map((emp, index) => (
                     <tr key={index}>
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Sr_emp}</td>
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Employee_Code}</td>
@@ -139,6 +169,19 @@ const EmployeeTable = () => {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Pagination */}
+          <div className='flex justify-center mt-4'>
+            <nav>
+              <ul className='flex space-x-2'>
+                {Array.from({ length: Math.ceil(EmployeeDetails.length / employeesPerPage) }, (_, index) => (
+                  <li key={index} className={`px-3 py-2 cursor-pointer ${index + 1 === currentPage ? 'bg-brand_colors text-white' : 'bg-gray-200'}`} onClick={() => paginate(index + 1)}>
+                    {index + 1}
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
 
           {showPasswordDialog && (

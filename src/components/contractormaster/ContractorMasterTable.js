@@ -8,7 +8,10 @@ import axios from 'axios'
 const ContractorMasterTable = () => {
   const navigate = useNavigate()
   const { companyName, companyId } = useSelector((state) => state.company);
-  const [ContractAllData, setContractAllData] = useState()
+  const [ContractAllData, setContractAllData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // You can adjust this to control the number of items per page
   const BASE_URL = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token");
 
@@ -20,7 +23,6 @@ const ContractorMasterTable = () => {
         },
       });
       const res = response.data;
-      console.log(res);
       setContractAllData(res);
     } catch (error) {
       console.log(error);
@@ -39,8 +41,11 @@ const ContractorMasterTable = () => {
     try {
       const isConfirmed = window.confirm("Are you sure you want to delete this contract?");
       if (isConfirmed) {
-        const response = await axios.delete(`${BASE_URL}/contract/delete/${conid}`);
-        const res = await response.data;
+        await axios.delete(`${BASE_URL}/contract/delete/${conid}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         handleFetchContract();
       }
     } catch (error) {
@@ -48,10 +53,22 @@ const ContractorMasterTable = () => {
     }
   };
 
+  const active = "border-[4px] border-brand_b_color rounded-[20px] bg-[#F0F4F7] text-[20px] px-2 py-1 text-brand_color";
 
+  // Filter contractors based on the search query
+  const filteredData = ContractAllData.filter(contract =>
+    contract.Name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const active = "border-[4px] border-brand_b_color rounded-[20px] bg-[#F0F4F7] text-[20px] px-2 py-1 text-brand_color"
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <RootLayout>
@@ -61,14 +78,23 @@ const ContractorMasterTable = () => {
             <h2 className='text-xl font-semibold text-brand_color'>Contractor List</h2>
             {companyName &&
               <button className={active}>{companyName}</button>
-
             }
             {companyName !== "ALL" &&
               <button onClick={() => navigate("/contractormaster")} className='bg-brand_colors text-white px-4 py-2 rounded hover:bg-opacity-80'>
                 Add Contractor +
               </button>
             }
+          </div>
 
+          {/* Search Input */}
+          <div className='mb-4'>
+            <input
+              type="text"
+              placeholder="Search Contractor by Name"
+              className="px-4 py-2 border rounded"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
 
           <div className='overflow-x-auto'>
@@ -86,8 +112,8 @@ const ContractorMasterTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {ContractAllData && ContractAllData.length > 0 ? (
-                  ContractAllData.map((contract, index) => (
+                {currentData && currentData.length > 0 ? (
+                  currentData.map((contract, index) => (
                     <tr key={index}>
                       <td className='border-b_color border px-2 py-[6px]'>{contract.Name}</td>
                       <td className='border-b_color border px-2 py-[6px]'>{contract.PAN_Card_No}</td>
@@ -109,7 +135,19 @@ const ContractorMasterTable = () => {
                 )}
               </tbody>
             </table>
+          </div>
 
+          {/* Pagination Controls */}
+          <div className="mt-4 flex justify-center space-x-2">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-brand_colors text-white' : 'bg-gray-200'}`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
           </div>
         </section>
       </DashboardLayout>
@@ -117,4 +155,4 @@ const ContractorMasterTable = () => {
   )
 }
 
-export default ContractorMasterTable
+export default ContractorMasterTable;

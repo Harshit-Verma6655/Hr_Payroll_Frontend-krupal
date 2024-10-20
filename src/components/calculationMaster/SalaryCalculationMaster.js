@@ -287,19 +287,19 @@ const SalaryCalculationMaster = () => {
                             {companyName && (
                                 <button className={active}>{companyName}</button>
                             )}
-                            <div className='w-[%]'>
+                            <div>
                                 <label className={LabelCss}>Year</label>
-                                <input className={InputCss} type='text' name='year' value={formData.year} onChange={handleChange} readOnly />
+                                <input className={`${InputCss} bg-gray-200`} type='text' name='year' value={formData.year} onChange={handleChange} readOnly />
                             </div>
-                            <div className='w-[%]'>
+                            <div>
                                 <label className={LabelCss}>Month</label>
-                                <input className={InputCss} type='text' name='month' value={formData.month} onChange={handleChange} readOnly />
+                                <input className={`${InputCss} bg-gray-200`} type='text' name='month' value={formData.month} onChange={handleChange} readOnly />
                             </div>
 
                             {/* Working Days */}
-                            <div className='w-[%]'>
+                            <div>
                                 <label className={LabelCss}>Working Days</label>
-                                <input className={InputCss} type='number' min="0" name='workingDays' value={formData.workingDays} onChange={handleChange} readOnly />
+                                <input className={`${InputCss} bg-gray-200`} type='number' min="0" name='workingDays' value={formData.workingDays} onChange={handleChange} readOnly />
                             </div>
                             {/* Employee Name */}
                             <div className='w-[%]'>
@@ -335,7 +335,7 @@ const SalaryCalculationMaster = () => {
                                         {/* Payable Amount */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>Payable Amount</label>
-                                            <input className={InputCss} type='number' min="0" name='payableAmount' value={formData.payableAmount} onChange={handleChange} />
+                                            <input className={`${InputCss} bg-gray-200`} type='number' min="0" name='payableAmount' value={formData.payableAmount} onChange={handleChange} />
                                         </div>
 
                                         {/* Daily Allowance */}
