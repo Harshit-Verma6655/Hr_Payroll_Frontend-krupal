@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import DashboardLayout from '../DashboardLayout';
 import RootLayout from '../RootLayout';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const SalaryCalculationMaster = () => {
     const LabelCss = "text-[#000000] font-[500] text-[18px] text-nowrap";
@@ -11,6 +12,10 @@ const SalaryCalculationMaster = () => {
     const active = "border-[4px] border-brand_b_color rounded-[20px] bg-[#F0F4F7] text-[20px] p-2 text-brand_color w-[20%]";
     const [employeeNames, setEmployeeNames] = useState([]);
     const BASE_URL = process.env.REACT_APP_API_URL;
+    const token = localStorage.getItem("token")
+    const newHeader = {
+        "Authorization": `Bearer ${token}`
+    }
 
     // Form Define
     const [formData, setFormData] = useState({
@@ -28,11 +33,11 @@ const SalaryCalculationMaster = () => {
         otherAmount: 0,
         overTime: 0,
         Special_Allowance: 0,
-        allowance5: 0,
-        allowance6: 0,
-        allowance7: 0,
-        allowance8: 0,
-        diffToPay: 0,
+        Amount_Name_5: 0,
+        Amount_Name_6: 0,
+        Amount_Name_7: 0,
+        Amount_Name_8: 0,
+        Difference_Pay: 0,
         loan: 0,
         glwf: 0,
         employeePF: 0,
@@ -75,25 +80,45 @@ const SalaryCalculationMaster = () => {
     }, [location.search]);
 
     // Handle input change and fetch value in form control
+    const calculateGrossEarnings = (data) => {
+        return (
+            parseFloat(data.payableAmount || 0) +
+            parseFloat(data.dailyAllowance || 0) +
+            parseFloat(data.HRA || 0) +
+            parseFloat(data.Travelling_Allowance || 0) +
+            parseFloat(data.Conveyance || 0) +
+            parseFloat(data.W_LA || 0) +
+            parseFloat(data.otherAmount || 0) +
+            parseFloat(data.overTime || 0) +
+            parseFloat(data.Special_Allowance || 0) +
+            parseFloat(data.Amount_Name_5 || 0) +
+            parseFloat(data.Amount_Name_6 || 0) +
+            parseFloat(data.Amount_Name_7 || 0) +
+            parseFloat(data.Amount_Name_8 || 0) +
+            parseFloat(data.Difference_Pay || 0)
+        );
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
 
         setFormData((prevData) => {
             const updatedData = { ...prevData, [name]: value };
+
             // Ensure payableDays does not exceed workingDays
             if (name === 'payableDays' && parseFloat(value) > parseFloat(updatedData.workingDays)) {
                 updatedData.payableDays = updatedData.workingDays; // Reset to workingDays
                 alert(`Payable Days cannot exceed Working Days (${updatedData.workingDays}).`); // Optional alert
             }
+
             // Calculate Payable Amount dynamically
             const payableDays = parseFloat(updatedData.payableDays || 0);
             const consolidatedPayRate = parseFloat(updatedData.Consolidated_Pay_Rate || 0);
             const payRate = parseFloat(updatedData.Pay_Rate || 0);
 
-            // Calculate Payable Amount based on the provided logic
             const payableAmount = (consolidatedPayRate || payRate) * payableDays;
 
-            // Calculate the gross earnings by summing all relevant fields, excluding Pay_Rate and Consolidated_Pay_Rate
+            // Calculate the gross earnings
             const grossEarnings =
                 parseFloat(payableAmount || 0) +
                 parseFloat(updatedData.dailyAllowance || 0) +
@@ -104,11 +129,11 @@ const SalaryCalculationMaster = () => {
                 parseFloat(updatedData.otherAmount || 0) +
                 parseFloat(updatedData.overTime || 0) +
                 parseFloat(updatedData.Special_Allowance || 0) +
-                parseFloat(updatedData.allowance5 || 0) +
-                parseFloat(updatedData.allowance6 || 0) +
-                parseFloat(updatedData.allowance7 || 0) +
-                parseFloat(updatedData.allowance8 || 0) +
-                parseFloat(updatedData.diffToPay || 0);
+                parseFloat(updatedData.Amount_Name_5 || 0) +
+                parseFloat(updatedData.Amount_Name_6 || 0) +
+                parseFloat(updatedData.Amount_Name_7 || 0) +
+                parseFloat(updatedData.Amount_Name_8 || 0) +
+                parseFloat(updatedData.Difference_Pay || 0);
 
             // Calculate gross deductions
             const grossDeductions =
@@ -127,25 +152,57 @@ const SalaryCalculationMaster = () => {
 
             const netAmount = grossEarnings - grossDeductions;
 
+            // Calculate the total from specified fields
+            const totalSalaryComponents =
+                payableAmount +
+                parseFloat(updatedData.dailyAllowance || 0) +
+                parseFloat(updatedData.Travelling_Allowance || 0) +
+                parseFloat(updatedData.Conveyance || 0) +
+                parseFloat(updatedData.otherAmount || 0) +
+                parseFloat(updatedData.overTime || 0) +
+                parseFloat(updatedData.Special_Allowance || 0) +
+                parseFloat(updatedData.Amount_Name_5 || 0) +
+                parseFloat(updatedData.Amount_Name_6 || 0) +
+                parseFloat(updatedData.Amount_Name_7 || 0) +
+                parseFloat(updatedData.Difference_Pay || 0);
+
+            // Calculate Employee PF capped at 15000
+            const pfBase = totalSalaryComponents > 15000 ? 15000 : totalSalaryComponents; // Cap at 15000
+            const employeePF = (pfBase * 12) / 100; // Calculate Employee PF using capped amount
+            const employerPF = (pfBase * 8.33) / 100; // Calculate employerPF PF using capped amount
+            const ac1 = ((pfBase * 0.12) + (pfBase * 0.0367)) / 100; // Calculate ac1 PF using capped amount
+            const calculatedValue = (pfBase * 0.50) / 100; // Calculate initial value
+            const ac2 = calculatedValue <= 75 ? 500 : calculatedValue; // Apply the condition
+            const ac10 = (pfBase * 8.33) / 100;
+            const finalValue = (pfBase * 0.50) / 100; // Calculate the initial value
+            const ac21 = finalValue > 75 ? 500 : finalValue; // Set to 500 if ac21 exceeds 75
+
+
             // Update grossEarnings in formData
             return {
                 ...updatedData,
+
                 payableAmount: payableAmount || 0,
                 grossEarnings: isNaN(grossEarnings) ? 0 : grossEarnings,
                 grossDeductions: grossDeductions,
-                netAmount: netAmount
+                netAmount: netAmount,
+                employeePF: isNaN(employeePF) ? 0 : employeePF,// Ensure employeePF is a number
+                employerPF: isNaN(employerPF) ? 0 : employerPF, // Ensure employerPF is a number
+                ac1: isNaN(ac1) ? 0 : ac1, // Ensure ac1 is a number
+                ac2: isNaN(ac2) ? 0 : ac2, // Ensure ac2 is a number
+                ac10: isNaN(ac10) ? 0 : ac10, // Ensure ac10 is a number
+                ac21: isNaN(ac21) ? 0 : ac21, // Ensure ac21 is a number
+                ac22: 0, // Ensure ac21 is a number
             };
         });
     };
 
-    // Handle form submit
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData);
         navigate('/providentFund');
     };
 
-    // Fetch employee data from the API and set employee names
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
@@ -156,49 +213,20 @@ const SalaryCalculationMaster = () => {
                     const employeeList = data.employees.map(emp => ({
                         id: emp._id,
                         name: emp.Name_on_Aadhar + ' ' + emp.Surname_Last_Name,
-                        salaryDetails: emp.Employee_Salary // Include salary details
+                        salaryDetails: emp.Employee_Salary,
                     }));
                     setEmployeeNames(employeeList);
 
                     // Set the first employee as the default selected employee
                     if (employeeList.length > 0) {
                         const firstEmployee = employeeList[0];
+                        setFormData(prevData => ({
+                            ...prevData,
+                            employeeName: firstEmployee.name,
 
-                        setFormData(prevData => {
-                            const updatedData = {
-                                ...prevData,
-                                employeeName: firstEmployee.name,
-                                // Set the salary fields with the first employee's salary details
-                                Pay_Rate: firstEmployee.salaryDetails?.Pay_Rate || '',
-                                Consolidated_Pay_Rate: firstEmployee.salaryDetails?.Consolidated_Pay_Rate || '',
-                                Consolidated_Salary: firstEmployee.salaryDetails?.Consolidated_Salary || '',
-                                HRA: firstEmployee.salaryDetails?.HRA || '',
-                                Conveyance: firstEmployee.salaryDetails?.Conveyance || '',
-                                Travelling_Allowance: firstEmployee.salaryDetails?.Travelling_Allowance || '',
-                                W_LA: firstEmployee.salaryDetails?.W_LA || '',
-                                Special_Allowance: firstEmployee.salaryDetails?.Special_Allowance || '',
-                                // Add more fields as needed
-                            };
-
-                            // Calculate the gross earnings by summing all relevant fields
-                            const grossEarnings =
-                                parseFloat(updatedData.payableAmount || 0) +
-                                parseFloat(updatedData.dailyAllowance || 0) +
-                                parseFloat(updatedData.HRA || 0) +
-                                parseFloat(updatedData.Travelling_Allowance || 0) +
-                                parseFloat(updatedData.Conveyance || 0) +
-                                parseFloat(updatedData.W_LA || 0) +
-                                parseFloat(updatedData.otherAmount || 0) +
-                                parseFloat(updatedData.overTime || 0) +
-                                parseFloat(updatedData.Special_Allowance || 0) +
-                                parseFloat(updatedData.allowance5 || 0) +
-                                parseFloat(updatedData.allowance6 || 0) +
-                                parseFloat(updatedData.allowance7 || 0) +
-                                parseFloat(updatedData.allowance8 || 0) +
-                                parseFloat(updatedData.diffToPay || 0);
-
-                            return { ...updatedData, grossEarnings: isNaN(grossEarnings) ? 0 : grossEarnings };
-                        });
+                            ...firstEmployee.salaryDetails,
+                        }));
+                        handleApiCalls(firstEmployee.id); // Fetch additional data
                     }
                 } else {
                     console.error('Failed to fetch employees:', data.message);
@@ -209,69 +237,108 @@ const SalaryCalculationMaster = () => {
         };
 
         fetchEmployees();
-    }, [BASE_URL, companyId]); // Added dependencies
+    }, [BASE_URL, companyId]);
 
     const handleEmployeeChange = (e) => {
         const selectedEmployeeName = e.target.value;
-
-        // Find the selected employee from the employeeNames list
-        const selectedEmployee = employeeNames.find((employee) => employee.name === selectedEmployeeName);
+        const selectedEmployee = employeeNames.find(employee => employee.name === selectedEmployeeName);
 
         if (selectedEmployee) {
-            // Update form data with the selected employee's details
-            setFormData((prevData) => {
+            setFormData(prevData => {
                 const updatedData = {
                     ...prevData,
                     employeeName: selectedEmployee.name,
-                    // Update salary details based on the selected employee
-                    Pay_Rate: selectedEmployee.salaryDetails?.Pay_Rate || '',
-                    Consolidated_Pay_Rate: selectedEmployee.salaryDetails?.Consolidated_Pay_Rate || '',
-                    Consolidated_Salary: selectedEmployee.salaryDetails?.Consolidated_Salary || '',
-                    HRA: selectedEmployee.salaryDetails?.HRA || '',
-                    Conveyance: selectedEmployee.salaryDetails?.Conveyance || '',
-                    Travelling_Allowance: selectedEmployee.salaryDetails?.Travelling_Allowance || '',
-                    W_LA: selectedEmployee.salaryDetails?.W_LA || '',
-                    Special_Allowance: selectedEmployee.salaryDetails?.Special_Allowance || '',
-                    // Add other salary fields here as needed
+                    ...selectedEmployee.salaryDetails,
                 };
 
                 // Reset payableDays if it exceeds workingDays
                 if (parseFloat(updatedData.payableDays) > parseFloat(updatedData.workingDays)) {
-                    updatedData.payableDays = updatedData.workingDays; // Reset to workingDays
-                    alert(`Payable Days cannot exceed Working Days (${updatedData.workingDays}).`); // Optional alert
+                    updatedData.payableDays = updatedData.workingDays;
+                    alert(`Payable Days cannot exceed Working Days (${updatedData.workingDays}).`);
                 }
 
-                // Calculate Payable Amount dynamically
                 const payableDays = parseFloat(updatedData.payableDays || 0);
                 const consolidatedPayRate = parseFloat(updatedData.Consolidated_Pay_Rate || 0);
                 const payRate = parseFloat(updatedData.Pay_Rate || 0);
-
-                // Calculate Payable Amount based on the provided logic
                 const payableAmount = (consolidatedPayRate || payRate) * payableDays;
 
-                // Calculate the gross earnings, excluding Pay_Rate and Consolidated_Pay_Rate
-                const grossEarnings =
-                    parseFloat(payableAmount || 0) +
-                    parseFloat(updatedData.dailyAllowance || 0) +
-                    parseFloat(updatedData.HRA || 0) +
-                    parseFloat(updatedData.Travelling_Allowance || 0) +
-                    parseFloat(updatedData.Conveyance || 0) +
-                    parseFloat(updatedData.W_LA || 0) +
-                    parseFloat(updatedData.otherAmount || 0) +
-                    parseFloat(updatedData.overTime || 0) +
-                    parseFloat(updatedData.Special_Allowance || 0) +
-                    parseFloat(updatedData.allowance5 || 0) +
-                    parseFloat(updatedData.allowance6 || 0) +
-                    parseFloat(updatedData.allowance7 || 0) +
-                    parseFloat(updatedData.allowance8 || 0) +
-                    parseFloat(updatedData.diffToPay || 0);
+                const grossEarnings = calculateGrossEarnings(updatedData);
 
-                // Update grossEarnings in formData
-                return { ...updatedData, payableAmount: payableAmount || 0, grossEarnings: isNaN(grossEarnings) ? 0 : grossEarnings };
+                return {
+                    ...updatedData,
+                    payableAmount: 0,
+                    payableDays: 0,
+                    grossEarnings: isNaN(grossEarnings) ? 0 : grossEarnings,
+                };
             });
+            handleApiCalls(selectedEmployee.id); // Fetch additional data for the selected employee
         }
     };
 
+    // Inside handleApiCalls function
+    const handleApiCalls = async (employeeId) => {
+        try {
+            // Prepare the payload for the first API call
+            const newFormdata = {
+                company_id: companyId,
+            };
+
+            // Calculate Payable Amount dynamically
+            const payableDays = parseFloat(formData.payableDays || 0);
+            const consolidatedPayRate = parseFloat(formData.Consolidated_Pay_Rate || 0);
+            const payRate = parseFloat(formData.Pay_Rate || 0);
+
+            const payableAmount = (consolidatedPayRate || payRate) * payableDays;
+            // Calculate total from specified fields
+            const totalSalaryComponents =
+                parseFloat(payableAmount || 0) +
+                parseFloat(formData.dailyAllowance || 0) +
+                parseFloat(formData.Travelling_Allowance || 0) +
+                parseFloat(formData.Conveyance || 0) +
+                parseFloat(formData.otherAmount || 0) +
+                parseFloat(formData.overTime || 0) +
+                parseFloat(formData.Special_Allowance || 0) +
+                parseFloat(formData.Amount_Name_5 || 0) +
+                parseFloat(formData.Amount_Name_6 || 0) +
+                parseFloat(formData.Amount_Name_7 || 0) +
+                parseFloat(formData.Difference_Pay || 0);
+
+            console.log(totalSalaryComponents);
+
+            const employeePF = (totalSalaryComponents * 12) / 100; // Calculate Employee PF using total
+
+            // Make both API calls in parallel using Promise.all
+            const [companyResponse, employeeResponse] = await Promise.all([
+                // First API call with axios
+                axios.post(`${BASE_URL}/v1/com/company/view`, newFormdata, { headers: newHeader }),
+
+                // Second API call using fetch
+                fetch(`${BASE_URL}/employee/${employeeId}`).then((res) => res.json()), // .json() is necessary for fetch to get the data
+            ]);
+
+            // Extract relevant data from both API responses
+            const companyData = companyResponse?.data?.CompanyDetails[0];
+            const employeeData = employeeResponse;
+
+            // Log the results of both API calls
+            console.log('Company Details:', companyData);
+            console.log('Employee Details:', employeeData);
+
+            // Conditional logic to set Employee PF
+            if (companyData?.company_other_detail?.pf_indicator === 'Yes' && employeeData?.PF === 'yes') {
+                console.log('Calculated Employee PF:', employeePF);
+
+                // Update formData state with the calculated PF
+                setFormData((prevData) => ({
+                    ...prevData,
+                    employeePF: employeePF || 0, // Set employeePF to 0 if calculation fails
+                }));
+            }
+
+        } catch (error) {
+            console.error('Error during API calls:', error);
+        }
+    };
 
     return (
         <RootLayout>
@@ -393,13 +460,13 @@ const SalaryCalculationMaster = () => {
                                         {/* Allowance 5 */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>Allowance 5</label>
-                                            <input className={InputCss} type='number' min="0" name='allowance5' value={formData.allowance5} onChange={handleChange} />
+                                            <input className={InputCss} type='number' min="0" name='Amount_Name_5' value={formData.Amount_Name_5} onChange={handleChange} />
                                         </div>
 
                                         {/* Allowance 6 */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>Allowance 6</label>
-                                            <input className={InputCss} type='number' min="0" name='allowance6' value={formData.allowance6} onChange={handleChange} />
+                                            <input className={InputCss} type='number' min="0" name='Amount_Name_6' value={formData.Amount_Name_6} onChange={handleChange} />
                                         </div>
 
                                     </div>
@@ -408,20 +475,20 @@ const SalaryCalculationMaster = () => {
                                         {/* Allowance 7 */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>Allowance 7</label>
-                                            <input className={InputCss} type='number' min="0" name='allowance7' value={formData.allowance7} onChange={handleChange} />
+                                            <input className={InputCss} type='number' min="0" name='Amount_Name_7' value={formData.Amount_Name_7} onChange={handleChange} />
                                         </div>
 
                                         {/* Allowance 8 */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>Allowance 8</label>
-                                            <input className={InputCss} type='number' min="0" name='allowance8' value={formData.allowance8} onChange={handleChange} />
+                                            <input className={InputCss} type='number' min="0" name='Amount_Name_8' value={formData.Amount_Name_8} onChange={handleChange} />
                                         </div>
 
 
                                         {/* Difference to Pay */}
                                         <div className='flex flex-col gap-1 w-[100%]'>
                                             <label className={LabelCss}>Diff. to Pay</label>
-                                            <input className={InputCss} type='number' min="0" name='diffToPay' value={formData.diffToPay} onChange={handleChange} />
+                                            <input className={InputCss} type='number' min="0" name='Difference_Pay' value={formData.Difference_Pay} onChange={handleChange} />
                                         </div>
                                     </div>
                                 </div>
