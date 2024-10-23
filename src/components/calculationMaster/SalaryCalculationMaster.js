@@ -42,7 +42,7 @@ const SalaryCalculationMaster = () => {
         glwf: 0,
         employeePF: 0,
         employerPF: 0,
-        professionalTax: 200,
+        professionalTax: 0,
         tds: 0,
         glwfEmployer: 0,
         esic: 0,
@@ -283,30 +283,6 @@ const SalaryCalculationMaster = () => {
                 company_id: companyId,
             };
 
-            // Calculate Payable Amount dynamically
-            const payableDays = parseFloat(formData.payableDays || 0);
-            const consolidatedPayRate = parseFloat(formData.Consolidated_Pay_Rate || 0);
-            const payRate = parseFloat(formData.Pay_Rate || 0);
-
-            const payableAmount = (consolidatedPayRate || payRate) * payableDays;
-            // Calculate total from specified fields
-            const totalSalaryComponents =
-                parseFloat(payableAmount || 0) +
-                parseFloat(formData.dailyAllowance || 0) +
-                parseFloat(formData.Travelling_Allowance || 0) +
-                parseFloat(formData.Conveyance || 0) +
-                parseFloat(formData.otherAmount || 0) +
-                parseFloat(formData.overTime || 0) +
-                parseFloat(formData.Special_Allowance || 0) +
-                parseFloat(formData.Amount_Name_5 || 0) +
-                parseFloat(formData.Amount_Name_6 || 0) +
-                parseFloat(formData.Amount_Name_7 || 0) +
-                parseFloat(formData.Difference_Pay || 0);
-
-            console.log(totalSalaryComponents);
-
-            const employeePF = (totalSalaryComponents * 12) / 100; // Calculate Employee PF using total
-
             // Make both API calls in parallel using Promise.all
             const [companyResponse, employeeResponse] = await Promise.all([
                 // First API call with axios
@@ -326,6 +302,27 @@ const SalaryCalculationMaster = () => {
 
             // Conditional logic to set Employee PF
             if (companyData?.company_other_detail?.pf_indicator === 'Yes' && employeeData?.PF === 'yes') {
+                // Calculate Payable Amount dynamically
+                const payableDays = parseFloat(formData.payableDays || 0);
+                const consolidatedPayRate = parseFloat(employeeData?.Employee_Salary?.Consolidated_Pay_Rate || 0);
+                const payRate = parseFloat(employeeData?.Employee_Salary?.Pay_Rate || 0);
+
+                const payableAmount = (consolidatedPayRate || payRate) * payableDays;
+                // Calculate total from specified fields
+                const totalSalaryComponents =
+                    parseFloat(payableAmount || 0) +
+                    parseFloat(formData.dailyAllowance || 0) +
+                    parseFloat(formData.Travelling_Allowance || 0) +
+                    parseFloat(formData.Conveyance || 0) +
+                    parseFloat(formData.otherAmount || 0) +
+                    parseFloat(formData.overTime || 0) +
+                    parseFloat(formData.Special_Allowance || 0) +
+                    parseFloat(formData.Amount_Name_5 || 0) +
+                    parseFloat(formData.Amount_Name_6 || 0) +
+                    parseFloat(formData.Amount_Name_7 || 0) +
+                    parseFloat(formData.Difference_Pay || 0);
+
+                const employeePF = (totalSalaryComponents * 12) / 100; // Calculate Employee PF using total
                 console.log('Calculated Employee PF:', employeePF);
 
                 // Update formData state with the calculated PF
