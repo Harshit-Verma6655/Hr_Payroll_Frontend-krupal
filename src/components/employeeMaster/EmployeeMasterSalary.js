@@ -30,7 +30,7 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
     }
 
     // Calculate the sum of allowances
-    const allowancesTotal = salaryFields.slice(2) // Exclude 'Consolidated_Salary' and 'Pay_Rate'
+    const allowancesTotal = salaryFields // Exclude 'Consolidated_Salary' and 'Pay_Rate'
       .map(field => parseFloat(updatedValues[field]) || 0)
       .reduce((acc, curr) => acc + curr, 0);
 
@@ -80,7 +80,7 @@ const EmployeeMasterSalary = ({ AllExpand, setEmployeeTab, handleEmployeeSalary,
       // If the name is 'Consolidated_Salary', update 'Consolidated_Pay_Rate'
       // If the name is 'Consolidated_Salary', update 'Consolidated_Pay_Rate'
       if (name === 'Consolidated_Salary') {
-        const newConsolidatedPayRate = value ? (Number(value) / 26).toFixed(2) : "";
+        const newConsolidatedPayRate = value ? (Number(value) / 26) : "";
 
         updatedValues.Consolidated_Pay_Rate = newConsolidatedPayRate;
 
