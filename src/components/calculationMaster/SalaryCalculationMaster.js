@@ -79,41 +79,15 @@ const SalaryCalculationMaster = () => {
         }));
     }, [location.search]);
 
-    // Handle input change and fetch value in form control
-    const calculateGrossEarnings = (data) => {
-        return (
-            parseFloat(data.payableAmount || 0) +
-            parseFloat(data.dailyAllowance || 0) +
-            parseFloat(data.HRA || 0) +
-            parseFloat(data.Travelling_Allowance || 0) +
-            parseFloat(data.Conveyance || 0) +
-            parseFloat(data.W_LA || 0) +
-            parseFloat(data.otherAmount || 0) +
-            parseFloat(data.overTime || 0) +
-            parseFloat(data.Special_Allowance || 0) +
-            parseFloat(data.Amount_Name_5 || 0) +
-            parseFloat(data.Amount_Name_6 || 0) +
-            parseFloat(data.Amount_Name_7 || 0) +
-            parseFloat(data.Amount_Name_8 || 0) +
-            parseFloat(data.Difference_Pay || 0)
-        );
-    };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
 
         setFormData((prevData) => {
             const updatedData = { ...prevData, [name]: value };
 
-            // Ensure payableDays does not exceed workingDays
-            if (name === 'payableDays' && parseFloat(value) > parseFloat(updatedData.workingDays)) {
-                updatedData.payableDays = updatedData.workingDays; // Reset to workingDays
-                alert(`Payable Days cannot exceed Working Days (${updatedData.workingDays}).`); // Optional alert
-            }
-
             // Calculate Payable Amount dynamically
             const payableDays = parseFloat(updatedData.payableDays || 0);
-            const consolidatedPayRate = parseFloat(updatedData.Consolidated_Pay_Rate || 0);
+            const consolidatedPayRate = parseFloat((updatedData.Consolidated_Salary / 26) || 0);
             const payRate = parseFloat(updatedData.Pay_Rate || 0);
 
             const payableAmount = (consolidatedPayRate || payRate) * payableDays;
@@ -170,11 +144,11 @@ const SalaryCalculationMaster = () => {
             const pfBase = totalSalaryComponents > 15000 ? 15000 : totalSalaryComponents; // Cap at 15000
             const employeePF = (pfBase * 12) / 100; // Calculate Employee PF using capped amount
             const employerPF = (pfBase * 8.33) / 100; // Calculate employerPF PF using capped amount
-            const ac1 = ((pfBase * 0.12) + (pfBase * 0.0367)) / 100; // Calculate ac1 PF using capped amount
-            const calculatedValue = (pfBase * 0.50) / 100; // Calculate initial value
+            const ac1 = ((pfBase * 15.67) / 100); // Calculate ac1 PF using capped amount
+            const calculatedValue = (totalSalaryComponents * 0.50) / 100; // Calculate initial value
             const ac2 = calculatedValue <= 75 ? 500 : calculatedValue; // Apply the condition
             const ac10 = (pfBase * 8.33) / 100;
-            const finalValue = (pfBase * 0.50) / 100; // Calculate the initial value
+            const finalValue = (totalSalaryComponents * 0.50) / 100; // Calculate the initial value
             const ac21 = finalValue > 75 ? 500 : finalValue; // Set to 500 if ac21 exceeds 75
 
 
@@ -206,6 +180,15 @@ const SalaryCalculationMaster = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
+                // Get the workingDays from the URL
+                const params = new URLSearchParams(window.location.search);
+                const workingDays = params.get('workingDays'); // Fetch workingDays from URL
+                console.log('Working Days:', workingDays); // Log working days
+
+                // Now, get the payableDays from the form
+                const payableDays = formData.payableDays;
+                console.log('Payable Days:', payableDays); // Log payable days
+
                 const response = await fetch(`${BASE_URL}/employee/employees/${companyId}`);
                 const data = await response.json();
 
@@ -216,18 +199,55 @@ const SalaryCalculationMaster = () => {
                         salaryDetails: emp.Employee_Salary,
                     }));
                     setEmployeeNames(employeeList);
-
-                    // Set the first employee as the default selected employee
                     if (employeeList.length > 0) {
                         const firstEmployee = employeeList[0];
+
+                        const Conveyance = ((firstEmployee.salaryDetails?.Conveyance / workingDays) * payableDays);
+                        const dailyAllowance = ((firstEmployee.salaryDetails?.dailyAllowance / workingDays) * payableDays);
+                        const HRA = ((firstEmployee.salaryDetails?.HRA / workingDays) * payableDays);
+                        const Travelling_Allowance = ((firstEmployee.salaryDetails?.Travelling_Allowance / workingDays) * payableDays);
+                        const W_LA = ((firstEmployee.salaryDetails?.W_LA / workingDays) * payableDays);
+                        const otherAmount = ((firstEmployee.salaryDetails?.otherAmount / workingDays) * payableDays);
+                        const overTime = ((firstEmployee.salaryDetails?.overTime / workingDays) * payableDays);
+                        const Special_Allowance = ((firstEmployee.salaryDetails?.Special_Allowance / workingDays) * payableDays);
+                        const Amount_Name_5 = ((firstEmployee.salaryDetails?.Amount_Name_5 / workingDays) * payableDays);
+                        const Amount_Name_6 = ((firstEmployee.salaryDetails?.Amount_Name_6 / workingDays) * payableDays);
+                        const Amount_Name_7 = ((firstEmployee.salaryDetails?.Amount_Name_7 / workingDays) * payableDays);
+                        const Amount_Name_8 = ((firstEmployee.salaryDetails?.Amount_Name_8 / workingDays) * payableDays);
+                        const Difference_Pay = ((firstEmployee.salaryDetails?.Difference_Pay / workingDays) * payableDays);
+
                         setFormData(prevData => ({
                             ...prevData,
                             employeeName: firstEmployee.name,
-
                             ...firstEmployee.salaryDetails,
+                            Conveyance: Conveyance,
+                            dailyAllowance: dailyAllowance,
+                            HRA: HRA,
+                            Travelling_Allowance: Travelling_Allowance,
+                            W_LA: W_LA,
+                            otherAmount: otherAmount,
+                            overTime: overTime,
+                            Special_Allowance: Special_Allowance,
+                            Amount_Name_5: Amount_Name_5,
+                            Amount_Name_6: Amount_Name_6,
+                            Amount_Name_7: Amount_Name_7,
+                            Amount_Name_8: Amount_Name_8,
+                            Difference_Pay: Difference_Pay
+
                         }));
                         handleApiCalls(firstEmployee.id); // Fetch additional data
                     }
+                    // Set the first employee as the default selected employee
+                    // if (employeeList.length > 0) {
+                    //     const firstEmployee = employeeList[0];
+                    //     setFormData(prevData => ({
+                    //         ...prevData,
+                    //         employeeName: firstEmployee.name,
+
+                    //         ...firstEmployee.salaryDetails,
+                    //     }));
+                    //     handleApiCalls(firstEmployee.id); // Fetch additional data
+                    // }
                 } else {
                     console.error('Failed to fetch employees:', data.message);
                 }
@@ -237,7 +257,7 @@ const SalaryCalculationMaster = () => {
         };
 
         fetchEmployees();
-    }, [BASE_URL, companyId]);
+    }, [BASE_URL, companyId, formData.payableDays]); // Include formData.payableDays in dependencies
 
     const handleEmployeeChange = (e) => {
         const selectedEmployeeName = e.target.value;
@@ -246,30 +266,45 @@ const SalaryCalculationMaster = () => {
         if (selectedEmployee) {
             setFormData(prevData => {
                 const updatedData = {
-                    ...prevData,
+                    ...selectedEmployee,
                     employeeName: selectedEmployee.name,
                     ...selectedEmployee.salaryDetails,
                 };
 
-                // Reset payableDays if it exceeds workingDays
-                if (parseFloat(updatedData.payableDays) > parseFloat(updatedData.workingDays)) {
-                    updatedData.payableDays = updatedData.workingDays;
-                    alert(`Payable Days cannot exceed Working Days (${updatedData.workingDays}).`);
-                }
-
-                const payableDays = parseFloat(updatedData.payableDays || 0);
-                const consolidatedPayRate = parseFloat(updatedData.Consolidated_Pay_Rate || 0);
-                const payRate = parseFloat(updatedData.Pay_Rate || 0);
-                const payableAmount = (consolidatedPayRate || payRate) * payableDays;
-
-                const grossEarnings = calculateGrossEarnings(updatedData);
-
                 return {
                     ...updatedData,
-                    payableAmount: 0,
-                    payableDays: 0,
-                    grossEarnings: isNaN(grossEarnings) ? 0 : grossEarnings,
+                    payableDays: updatedData?.payableDays || 0,
+                    payableAmount: updatedData?.payableAmount || 0,
+                    dailyAllowance: updatedData?.dailyAllowance || 0,
+                    HRA: updatedData?.HRA || 0,
+                    Travelling_Allowance: updatedData?.Travelling_Allowance || 0,
+                    Conveyance: updatedData?.Conveyance || 0,
+                    W_LA: updatedData?.W_LA || 0,
+                    otherAmount: updatedData?.otherAmount || 0,
+                    overTime: updatedData?.overTime || 0,
+                    Special_Allowance: updatedData?.Special_Allowance || 0,
+                    Amount_Name_5: updatedData?.Amount_Name_5 || 0,
+                    Amount_Name_6: updatedData?.Amount_Name_6 || 0,
+                    Amount_Name_7: updatedData?.Amount_Name_7 || 0,
+                    Amount_Name_8: updatedData?.Amount_Name_8 || 0,
+                    Difference_Pay: updatedData?.Difference_Pay || 0,
+                    loan: updatedData?.loan || 0,
+                    glwf: updatedData?.glwf || 0,
+                    employeePF: updatedData?.employeePF || 0,
+                    employerPF: updatedData?.employerPF || 0,
+                    professionalTax: updatedData?.professionalTax || 0,
+                    tds: updatedData?.tds || 0,
+                    glwfEmployer: updatedData?.glwfEmployer || 0,
+                    esic: updatedData?.esic || 0,
+                    employerESIC: updatedData?.employerESIC || 0,
+                    advance: updatedData?.advance || 0,
+                    ac1: updatedData?.ac1 || 0,
+                    ac2: updatedData?.ac2 || 0,
+                    ac10: updatedData?.ac10 || 0,
+                    ac21: updatedData?.ac21 || 0,
+                    ac22: updatedData?.ac22 || 0,
                 };
+
             });
             handleApiCalls(selectedEmployee.id); // Fetch additional data for the selected employee
         }
@@ -531,7 +566,6 @@ const SalaryCalculationMaster = () => {
                                                 name='professionalTax'
                                                 value={formData.professionalTax}
                                                 onChange={handleChange}
-                                                readOnly
                                             />
                                         </div>
 
