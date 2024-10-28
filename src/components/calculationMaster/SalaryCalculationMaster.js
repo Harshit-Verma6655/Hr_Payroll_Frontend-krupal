@@ -77,6 +77,7 @@ const SalaryCalculationMaster = () => {
             year: parseInt(year, 10), // Convert year to number
             workingDays
         }));
+
     }, [location.search]);
 
     const handleChange = (e) => {
@@ -169,6 +170,7 @@ const SalaryCalculationMaster = () => {
                 ac22: 0, // Ensure ac21 is a number
             };
         });
+
     };
 
     const handleSubmit = (e) => {
@@ -176,6 +178,7 @@ const SalaryCalculationMaster = () => {
         console.log(formData);
         navigate('/providentFund');
     };
+    const [id, setId]=useState(null);
 
     useEffect(() => {
         const fetchEmployees = async () => {
@@ -187,21 +190,23 @@ const SalaryCalculationMaster = () => {
 
                 // Now, get the payableDays from the form
                 const payableDays = formData.payableDays;
-                console.log('Payable Days:', payableDays); // Log payable days
+                console.log(' BASE_URL:', BASE_URL); // Log payable days
 
-                const response = await fetch(`${BASE_URL}/employee/employees/${companyId}`);
+                const response = await fetch(`${BASE_URL}/employee/employees/${"6710dc36ec10dd161c5ce91f"}`);
                 const data = await response.json();
-
+console.log(data);
                 if (response.ok) {
-                    const employeeList = data.employees.map(emp => ({
+                    const employeeList = data?.map(emp => ({
                         id: emp._id,
                         name: emp.Name_on_Aadhar + ' ' + emp.Surname_Last_Name,
                         salaryDetails: emp.Employee_Salary,
                     }));
+                    console.log("employeeList",employeeList);
                     setEmployeeNames(employeeList);
-                    if (employeeList.length > 0) {
-                        const firstEmployee = employeeList[0];
-
+                    if (employeeList.length > 0 && id!==null) {
+                        console.log("idddddd",id);
+                        const firstEmployee = employeeList.find((emp)=>emp._id=id);
+console.log("firstEmployee", firstEmployee);
                         const Conveyance = ((firstEmployee.salaryDetails?.Conveyance / workingDays) * payableDays);
                         const dailyAllowance = ((firstEmployee.salaryDetails?.dailyAllowance / workingDays) * payableDays);
                         const HRA = ((firstEmployee.salaryDetails?.HRA / workingDays) * payableDays);
@@ -235,19 +240,9 @@ const SalaryCalculationMaster = () => {
                             Difference_Pay: Difference_Pay
 
                         }));
-                        handleApiCalls(firstEmployee.id); // Fetch additional data
+                        // handleApiCalls(firstEmployee.id); // Fetch additional data
                     }
-                    // Set the first employee as the default selected employee
-                    // if (employeeList.length > 0) {
-                    //     const firstEmployee = employeeList[0];
-                    //     setFormData(prevData => ({
-                    //         ...prevData,
-                    //         employeeName: firstEmployee.name,
-
-                    //         ...firstEmployee.salaryDetails,
-                    //     }));
-                    //     handleApiCalls(firstEmployee.id); // Fetch additional data
-                    // }
+                
                 } else {
                     console.error('Failed to fetch employees:', data.message);
                 }
@@ -264,6 +259,8 @@ const SalaryCalculationMaster = () => {
         const selectedEmployee = employeeNames.find(employee => employee.name === selectedEmployeeName);
 
         if (selectedEmployee) {
+            setId(selectedEmployee.id);
+            console.log(selectedEmployee.id);
             setFormData(prevData => {
                 const updatedData = {
                     ...selectedEmployee,
@@ -319,13 +316,18 @@ const SalaryCalculationMaster = () => {
             };
 
             // Make both API calls in parallel using Promise.all
-            const [companyResponse, employeeResponse] = await Promise.all([
-                // First API call with axios
-                axios.post(`${BASE_URL}/v1/com/company/view`, newFormdata, { headers: newHeader }),
+            // const [companyResponse, employeeResponse] = await Promise.all([
+            //     // First API call with axios
+            //     axios.post(`${BASE_URL}/v1/com/company/view`, newFormdata, { headers: newHeader }),
 
-                // Second API call using fetch
-                fetch(`${BASE_URL}/employee/${employeeId}`).then((res) => res.json()), // .json() is necessary for fetch to get the data
-            ]);
+            //     // Second API call using fetch
+            //     fetch(`${BASE_URL}/employee/${employeeId}`).then((res) => res.json()), // .json() is necessary for fetch to get the data
+            // ]);
+
+         const companyResponse=   await  axios.post(`${BASE_URL}/v1/com/company/view`, newFormdata, { headers: newHeader });
+
+         const employeeResponse=   await  fetch(`${BASE_URL}/employee/${employeeId}`).then((res) => res.json());
+
 
             // Extract relevant data from both API responses
             const companyData = companyResponse?.data?.CompanyDetails[0];
