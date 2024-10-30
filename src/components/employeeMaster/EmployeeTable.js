@@ -24,7 +24,8 @@ const EmployeeTable = () => {
     try {
       const response = await axios.get(`${BASE_URL}/employee/employees/${companyId}`);
       const { employees } = response.data;
-      setEmployeeDetails(employees);
+      console.log("response.data", response.data);
+      setEmployeeDetails(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -80,12 +81,12 @@ const EmployeeTable = () => {
   // Pagination handlers
   const indexOfLastEmployee = currentPage * employeesPerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
-  const currentEmployees = EmployeeDetails.slice(indexOfFirstEmployee, indexOfLastEmployee);
+  const currentEmployees = EmployeeDetails?.slice(indexOfFirstEmployee, indexOfLastEmployee);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Filter employees based on the search term
-  const filteredEmployees = currentEmployees.filter((employee) =>
+  const filteredEmployees = currentEmployees?.filter((employee) =>
     employee?.Name_on_Aadhar?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     employee?.Employee_Code?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -138,8 +139,8 @@ const EmployeeTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredEmployees.length > 0 ? (
-                  filteredEmployees.map((emp, index) => (
+                {filteredEmployees?.length > 0 ? (
+                  filteredEmployees?.map((emp, index) => (
                     <tr key={index}>
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Sr_emp}</td>
                       <td className='border-b_color border px-2 py-[6px]'>{emp?.Employee_Code}</td>
@@ -175,7 +176,7 @@ const EmployeeTable = () => {
           <div className='flex justify-center mt-4'>
             <nav>
               <ul className='flex space-x-2'>
-                {Array.from({ length: Math.ceil(EmployeeDetails.length / employeesPerPage) }, (_, index) => (
+                {Array.from({ length: Math.ceil(EmployeeDetails?.length / employeesPerPage) }, (_, index) => (
                   <li key={index} className={`px-3 py-2 cursor-pointer ${index + 1 === currentPage ? 'bg-brand_colors text-white' : 'bg-gray-200'}`} onClick={() => paginate(index + 1)}>
                     {index + 1}
                   </li>

@@ -527,7 +527,7 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData, viewMode, set
                 <label className={LabelCss}>PF Rate</label>
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-3">
-                    <input
+                    {/* <input
                       type="radio"
                       name="rate"
                       value="10%"
@@ -535,7 +535,7 @@ const CompanyMasterForm = ({ AllExpand, handleChange, companyData, viewMode, set
 
                       checked={companyData.pf_rate.includes("10%")}
                     />
-                    <label className={LabelCss}>10 %</label>
+                    <label className={LabelCss}>10 %</label> */}
                   </div>
                   <div className="flex items-center gap-3">
                     <input
